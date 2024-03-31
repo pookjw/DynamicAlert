@@ -10,7 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 namespace da {
-void hookMessage(Class cls, SEL name, IMP hook, IMP _Nonnull * _Nullable old);
+void hookMessage(Class cls, SEL name, BOOL isInstanceMethod, IMP hook, IMP _Nonnull * _Nullable old);
 }
 
 NS_ASSUME_NONNULL_END

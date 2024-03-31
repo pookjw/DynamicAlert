@@ -8,8 +8,13 @@
 #import "da+hook.hpp"
 #import <objc/runtime.h>
 
-void da::hookMessage(Class cls, SEL name, IMP hook, IMP _Nonnull * _Nullable old) {
-    Method method = class_getInstanceMethod(cls, name);
+void da::hookMessage(Class cls, SEL name, BOOL isInstanceMethod, IMP hook, IMP _Nonnull * _Nullable old) {
+    Method method;
+    if (isInstanceMethod) {
+        method = class_getInstanceMethod(cls, name);
+    } else {
+        method = class_getClassMethod(cls, name);
+    }
     
     if (old) {
         *old = method_getImplementation(method);

@@ -11,6 +11,8 @@
 		4F625BBE2BB81B710029C995 /* da+hook.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4F625BBD2BB81B710029C995 /* da+hook.hpp */; };
 		4F625BBF2BB81B710029C995 /* da+hook.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4F625BBC2BB81B710029C995 /* da+hook.mm */; };
 		4F625BC22BB81C8B0029C995 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F625BC12BB81C8B0029C995 /* UIKit.framework */; };
+		4FBC0AF62BB967D30064F1A6 /* da+sbTools.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4FBC0AF52BB967D30064F1A6 /* da+sbTools.hpp */; };
+		4FBC0AF72BB967D30064F1A6 /* da+sbTools.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4FBC0AF42BB967D30064F1A6 /* da+sbTools.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +21,8 @@
 		4F625BBC2BB81B710029C995 /* da+hook.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "da+hook.mm"; sourceTree = "<group>"; };
 		4F625BBD2BB81B710029C995 /* da+hook.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "da+hook.hpp"; sourceTree = "<group>"; };
 		4F625BC12BB81C8B0029C995 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.4.sdk/System/iOSSupport/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		4FBC0AF42BB967D30064F1A6 /* da+sbTools.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "da+sbTools.mm"; sourceTree = "<group>"; };
+		4FBC0AF52BB967D30064F1A6 /* da+sbTools.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "da+sbTools.hpp"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +59,8 @@
 			isa = PBXGroup;
 			children = (
 				4F625BB82BB8124F0029C995 /* main.mm */,
+				4FBC0AF52BB967D30064F1A6 /* da+sbTools.hpp */,
+				4FBC0AF42BB967D30064F1A6 /* da+sbTools.mm */,
 			);
 			path = DynamicAlertSpringBoard;
 			sourceTree = "<group>";
@@ -83,6 +89,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FBC0AF62BB967D30064F1A6 /* da+sbTools.hpp in Headers */,
 				4F625BBE2BB81B710029C995 /* da+hook.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -176,6 +183,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FBC0AF72BB967D30064F1A6 /* da+sbTools.mm in Sources */,
 				4F625BB92BB8124F0029C995 /* main.mm in Sources */,
 				4F625BBF2BB81B710029C995 /* da+hook.mm in Sources */,
 			);
@@ -193,7 +201,7 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -254,7 +262,7 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
