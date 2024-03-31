@@ -17,7 +17,19 @@ __kindof UIViewController * /* (SBSystemApertureViewController *) */ systemApert
 
 id /* (SAUISystemApertureManager *) */ systemApertureManager();
 
+id /* (SBActivitySystemApertureElementObserver *) */ defaultActivitySystemApertureElementObserver();
+
 id /* (ACActivityDescriptor *) */ makeTestActivityDescriptor();
+
+id /* (ACActivityContent *) */ makeTestActivityContent();
+
+id /* (ACActivityContentUpdate *) */ makeTestActivityContentUpdate(id /* (ACActivityDescriptor *) */ descriptor, id /* (ACActivityContent *) */ content);
+
+id /* (SBActivityItem *) */ makeTestActivityItem(id /* (ACActivityContentUpdate *) */ contentUpdate);
+
+id /* (ACUISSystemApertureSceneHandle *) */ makeSystemApertureSceneHandleWithItem(id /* (SBActivityItem *) */ activityItem);
+
+id /* (SBSystemApertureSceneElement *) */ makeSystemApertureSceneElement(id /* (FBScene *) */ scene, id /* (SBSystemApertureController *) */ systemApertureController, void (^readyForPresentationHandler)(id /* (SBSystemApertureSceneElement *) */ element, BOOL success));
 
 }
 

@@ -29,8 +29,15 @@
     buttonConfiguration.title = @"Foo";
     
     UIAction *primaryAction = [UIAction actionWithHandler:^(__kindof UIAction * _Nonnull action) {
-        NSLog(@"Foo: %@", da::systemApertureManager());
-        NSLog(@"Foo: %@", da::makeTestActivityDescriptor());
+        id activitySystemApertureElementObserver = da::defaultActivitySystemApertureElementObserver();
+        id activityDescriptor = da::makeTestActivityDescriptor();
+        id activityContent = da::makeTestActivityContent();
+        id activityContentUpdate = da::makeTestActivityContentUpdate(activityDescriptor, activityContent);
+        id activityItem = da::makeTestActivityItem(activityContentUpdate);
+        
+        ((void (*)(id, SEL, id, id))objc_msgSend)(activitySystemApertureElementObserver, sel_registerName("_createAndActivateElementForActivityItem:completion:"), activityItem, ^void(BOOL success) {
+            NSLog(@"%d", success);
+        });
         
         /*
          -[ACActivityDescriptor initWithIdentifier:target:presentationOptions:isEphemeral:createdDate:descriptorData:contentType:]
@@ -38,11 +45,8 @@
          NSString * (Random UUID), ACActivityDescriptor *, int (2), ACActivityContent *
          -[ACActivityContentUpdate initWithIdentifier:descriptor:state:content:]
          
-         
          -[SBActivityItem initWithContentUpdate:]
-         -[SBActivitySystemApertureElementObserver _createSystemApertureSceneHandleWithItem:]
-         -[SBSystemApertureSceneElement initWithScene:statusBarBackgroundActivitiesSuppresser:readyForPresentationHandler:]
-         -[SAUISystemApertureManager registerElement:]
+         -[SBActivitySystemApertureElementObserver _createAndActivateElementForActivityItem:completion:]
          */
     }];
     
@@ -94,8 +98,22 @@ static id custom(id self, SEL _cmd, id identifier, id target, id presentationOpt
 }
 }
 
+namespace da_ACActivityContent {
+namespace initWithContentData_staleDate_relevanceScore {
+static id (*original)(id self, SEL _cmd, id contentData, NSDate *staleDate, double relevanceScore);
+static id custom(id self, SEL _cmd, id contentData, NSDate *staleDate, double relevanceScore) {
+    NSError * _Nullable error = nil;
+    id jsonObject = [NSJSONSerialization JSONObjectWithData:contentData options:NSJSONReadingJSON5Allowed error:&error];
+    
+    return original(self, _cmd, contentData, staleDate, relevanceScore);
+}
+}
+}
+
 __attribute__((constructor)) static void init() {
     da::hookMessage(UIScene.class, sel_registerName("_sceneForFBSScene:create:withSession:connectionOptions:"), NO, (IMP)(&da_UIScene::_sceneForFBSScene_create_withSession_connectionOptions::custom), (IMP *)(&da_UIScene::_sceneForFBSScene_create_withSession_connectionOptions::original));
     
     da::hookMessage(objc_lookUpClass("ACActivityDescriptor"), sel_registerName("initWithIdentifier:target:presentationOptions:isEphemeral:createdDate:descriptorData:contentType:"), YES, (IMP)(&da_ACActivityDescriptor::initWithIdentifier_target_presentationOptions_isEphemeral_createdDate_descriptorData_contentType::custom), (IMP *)(&da_ACActivityDescriptor::initWithIdentifier_target_presentationOptions_isEphemeral_createdDate_descriptorData_contentType::original));
+    
+    da::hookMessage(objc_lookUpClass("ACActivityContent"), sel_registerName("initWithContentData:staleDate:relevanceScore:"), YES, (IMP)(&da_ACActivityContent::initWithContentData_staleDate_relevanceScore::custom), (IMP *)(&da_ACActivityContent::initWithContentData_staleDate_relevanceScore::original));
 }
