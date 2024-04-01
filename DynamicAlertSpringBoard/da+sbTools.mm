@@ -50,7 +50,7 @@ id da::defaultActivitySystemApertureElementObserver() {
 id da::makeTestActivityDescriptor() {
     NSString *identifier = [NSUUID UUID].UUIDString;
     
-    NSString *target = NSBundle.mainBundle.bundleIdentifier;
+    NSString *target = @"com.apple.Preferences";
     
     id /* (ACActivityPresentationDestination *) */ destination_0 = ((id (*)(id, SEL, NSUInteger))objc_msgSend)([objc_lookUpClass("ACActivityPresentationDestination") alloc], sel_registerName("initWithDestination:"), 0);
     id /* (ACActivityPresentationDestination *) */ destination_1 = ((id (*)(id, SEL, NSUInteger))objc_msgSend)([objc_lookUpClass("ACActivityPresentationDestination") alloc], sel_registerName("initWithDestination:"), 1);
@@ -86,7 +86,7 @@ id da::makeTestActivityDescriptor() {
         @"platterTarget": @{
             @"widget": @{
                 @"containingProcess": @{
-                    @"bundleIdentifier": NSBundle.mainBundle.bundleIdentifier,
+                    @"bundleIdentifier": @"com.apple.Preferences",
                     @"canBypassActivityCountLimits": @NO,
                     @"canContributeToAllActivities": @NO,
                     @"canEndAllActivities": @NO,
@@ -98,7 +98,7 @@ id da::makeTestActivityDescriptor() {
             @{
             @"process": @{
                  @"target": @{
-                 @"bundleIdentifier": NSBundle.mainBundle.bundleIdentifier,
+                 @"bundleIdentifier": @"com.apple.Preferences",
              @"canBypassActivityCountLimits": @NO,
              @"canContributeToAllActivities": @NO,
              @"canEndAllActivities": @NO,
@@ -225,7 +225,7 @@ id da::makeTestActivityContent() {
 }
 
 id da::makeTestActivityContentUpdate(id  _Nonnull descriptor, id  _Nonnull content) {
-    NSString *identifier = NSBundle.mainBundle.bundleIdentifier;
+    NSString *identifier = @"com.apple.Preferences";
     
     // 아마 SpringBoard가 재시작 됐을 때를 말하는 것 같음
     NSUInteger state = 2;

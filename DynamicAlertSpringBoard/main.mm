@@ -30,13 +30,84 @@
     
     UIAction *primaryAction = [UIAction actionWithHandler:^(__kindof UIAction * _Nonnull action) {
         id activitySystemApertureElementObserver = da::defaultActivitySystemApertureElementObserver();
+        id systemApertureManager = da::systemApertureManager();
         id activityDescriptor = da::makeTestActivityDescriptor();
         id activityContent = da::makeTestActivityContent();
         id activityContentUpdate = da::makeTestActivityContentUpdate(activityDescriptor, activityContent);
         id activityItem = da::makeTestActivityItem(activityContentUpdate);
         
         ((void (*)(id, SEL, id, id))objc_msgSend)(activitySystemApertureElementObserver, sel_registerName("_createAndActivateElementForActivityItem:completion:"), activityItem, ^void(BOOL success) {
-            NSLog(@"%d", success);
+            assert(success);
+            
+            NSArray *registeredElements = ((id (*)(id, SEL))objc_msgSend)(systemApertureManager, sel_registerName("registeredElements"));
+            
+            for (id element in registeredElements) {
+//                ((void (*)(id, SEL, NSDirectionalEdgeInsets))objc_msgSend)(element, )
+                
+                NSMutableArray<UIView *> *views = [NSMutableArray array];
+                
+                __kindof UIView *sceneView = [objc_lookUpClass("SBSystemApertureSceneElementScenePresenterView") new];
+                [views addObject:sceneView];
+                ((void (*)(id, SEL, id))objc_msgSend)(element, sel_registerName("setSceneView:"), sceneView);
+                [sceneView release];
+                
+                __kindof UIView *leadingView = [objc_lookUpClass("SBSystemApertureSceneElementAccessoryView") new];
+                [views addObject:leadingView];
+                ((void (*)(id, SEL, id))objc_msgSend)(element, sel_registerName("setLeadingView:"), leadingView);
+                [leadingView release];
+                
+                __kindof UIView *trailingView = [objc_lookUpClass("SBSystemApertureSceneElementAccessoryView") new];
+                [views addObject:trailingView];
+                ((void (*)(id, SEL, id))objc_msgSend)(element, sel_registerName("setTrailingView:"), trailingView);
+                [trailingView release];
+                
+                __kindof UIView *minimalView = [objc_lookUpClass("SBSystemApertureSceneElementAccessoryView") new];
+                [views addObject:minimalView];
+                ((void (*)(id, SEL, id))objc_msgSend)(element, sel_registerName("setMinimalView:"), minimalView);
+                [minimalView release];
+                
+                __kindof UIView *detachedMinimalView = [objc_lookUpClass("SBSystemApertureSceneElementAccessoryView") new];
+                [views addObject:detachedMinimalView];
+                ((void (*)(id, SEL, id))objc_msgSend)(element, sel_registerName("setDetachedMinimalView:"), detachedMinimalView);
+                [detachedMinimalView release];
+                
+                [views enumerateObjectsUsingBlock:^(UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    UIView *yellowView = [UIView new];
+                    switch (idx) {
+                        case 0:
+//                            yellowView.backgroundColor = UIColor.cyanColor;
+                        {
+                            [yellowView release];
+                            yellowView = [UIActivityIndicatorView new];
+                            [(UIActivityIndicatorView *)yellowView startAnimating];
+                        }
+                        case 1:
+                            yellowView.backgroundColor = UIColor.blueColor;
+                            break;
+                        case 2:
+                            yellowView.backgroundColor = UIColor.greenColor;
+                            break;
+                        case 3:
+                            yellowView.backgroundColor = UIColor.purpleColor;
+                            break;
+                        case 4:
+                            yellowView.backgroundColor = UIColor.systemPinkColor;
+                            break;
+                        default:
+                            break;
+                    }
+                    
+                    yellowView.translatesAutoresizingMaskIntoConstraints = NO;
+                    [obj addSubview:yellowView];
+                    [NSLayoutConstraint activateConstraints:@[
+                        [yellowView.topAnchor constraintEqualToAnchor:obj.topAnchor],
+                        [yellowView.leadingAnchor constraintEqualToAnchor:obj.leadingAnchor],
+                        [yellowView.trailingAnchor constraintEqualToAnchor:obj.trailingAnchor],
+                        [yellowView.bottomAnchor constraintEqualToAnchor:obj.bottomAnchor],
+                    ]];
+                    [yellowView release];
+                }];
+            }
         });
         
         /*
@@ -110,10 +181,87 @@ static id custom(id self, SEL _cmd, id contentData, NSDate *staleDate, double re
 }
 }
 
+namespace da_SBSystemApertureSceneElementAccessoryView {
+namespace _configurePortalView {
+static void (*original)(id self, SEL _cmd);
+static void custom(id self, SEL _cmd) {
+    
+}
+}
+}
+
+namespace da_SBSAContainerViewDescription {
+namespace contentBounds {
+static CGRect (*original)(id self, SEL _cmd);
+static CGRect custom(id self, SEL _cmd) {
+    return CGRectMake(0.f, 0.f, 200.f, 200.f);
+}
+}
+}
+
+namespace da_SBSAContainerViewDescription {
+namespace _setContentBounds {
+static void (*original)(id self, SEL _cmd, CGRect);
+static void custom(id self, SEL _cmd, CGRect) {
+    original(self, _cmd, CGRectMake(0.f, 0.f, 200.f, 200.f));
+}
+}
+}
+
+namespace da_SBSAViewDescription {
+namespace bounds {
+static CGRect (*original)(id self, SEL _cmd);
+static CGRect custom(id self, SEL _cmd) {
+    return CGRectMake(0.f, 0.f, 407.33333333333331, 200.f);
+}
+}
+}
+namespace da_SBSAViewDescription {
+namespace center {
+static CGPoint (*original)(id self, SEL _cmd);
+static CGPoint custom(id self, SEL _cmd) {
+    return CGPointMake(200.f, 100.f);
+}
+}
+}
+
+namespace da_SBSAViewDescription {
+namespace _setCenter {
+static void (*original)(id self, SEL _cmd, CGPoint);
+static void custom(id self, SEL _cmd, CGPoint center) {
+    NSLog(@"Foo: %@", NSStringFromCGPoint(center));
+    original(self, _cmd, CGPointMake(215, 33.333333333333336));
+}
+}
+}
+
+namespace da_SBSAViewDescription {
+namespace _setBounds {
+static void (*original)(id self, SEL _cmd, CGRect);
+static void custom(id self, SEL _cmd, CGRect bounds) {
+    NSLog(@"Foo: %@", NSStringFromCGRect(bounds));
+    original(self, _cmd, CGRectMake(0.f, 0.f, 200.f, 100.f));
+}
+}
+}
+
 __attribute__((constructor)) static void init() {
     da::hookMessage(UIScene.class, sel_registerName("_sceneForFBSScene:create:withSession:connectionOptions:"), NO, (IMP)(&da_UIScene::_sceneForFBSScene_create_withSession_connectionOptions::custom), (IMP *)(&da_UIScene::_sceneForFBSScene_create_withSession_connectionOptions::original));
     
     da::hookMessage(objc_lookUpClass("ACActivityDescriptor"), sel_registerName("initWithIdentifier:target:presentationOptions:isEphemeral:createdDate:descriptorData:contentType:"), YES, (IMP)(&da_ACActivityDescriptor::initWithIdentifier_target_presentationOptions_isEphemeral_createdDate_descriptorData_contentType::custom), (IMP *)(&da_ACActivityDescriptor::initWithIdentifier_target_presentationOptions_isEphemeral_createdDate_descriptorData_contentType::original));
     
     da::hookMessage(objc_lookUpClass("ACActivityContent"), sel_registerName("initWithContentData:staleDate:relevanceScore:"), YES, (IMP)(&da_ACActivityContent::initWithContentData_staleDate_relevanceScore::custom), (IMP *)(&da_ACActivityContent::initWithContentData_staleDate_relevanceScore::original));
+    
+//    da::hookMessage(objc_lookUpClass("SBSystemApertureSceneElementAccessoryView"), sel_registerName("_configurePortalView"), YES, (IMP)(&da_SBSystemApertureSceneElementAccessoryView::_configurePortalView::custom), (IMP *)(&da_SBSystemApertureSceneElementAccessoryView::_configurePortalView::original));
+    
+//    da::hookMessage(objc_lookUpClass("SBSAContainerViewDescription"), sel_registerName("contentBounds"), YES, (IMP)(&da_SBSAContainerViewDescription::contentBounds::custom), (IMP *)(&da_SBSAContainerViewDescription::contentBounds::original));
+//    
+//    da::hookMessage(objc_lookUpClass("SBSAContainerViewDescription"), sel_registerName("_setContentBounds:"), YES, (IMP)(&da_SBSAContainerViewDescription::_setContentBounds::custom), (IMP *)(&da_SBSAContainerViewDescription::_setContentBounds::original));
+    
+//    da::hookMessage(objc_lookUpClass("SBSAViewDescription"), sel_registerName("center"), YES, (IMP)(&da_SBSAViewDescription::center::custom), (IMP *)(&da_SBSAViewDescription::center::original));
+//    da::hookMessage(objc_lookUpClass("SBSAViewDescription"), sel_registerName("bounds"), YES, (IMP)(&da_SBSAViewDescription::bounds::custom), (IMP *)(&da_SBSAViewDescription::bounds::original));
+    
+//    da::hookMessage(objc_lookUpClass("SBSAViewDescription"), sel_registerName("_setCenter:"), YES, (IMP)(&da_SBSAViewDescription::_setCenter::custom), (IMP *)(&da_SBSAViewDescription::_setCenter::original));
+    
+    da::hookMessage(objc_lookUpClass("SBSAViewDescription"), sel_registerName("_setBounds:"), YES, (IMP)(&da_SBSAViewDescription::_setBounds::custom), (IMP *)(&da_SBSAViewDescription::_setBounds::original));
 }
