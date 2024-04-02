@@ -15,6 +15,7 @@
 		4FBC0AF72BB967D30064F1A6 /* da+sbTools.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4FBC0AF42BB967D30064F1A6 /* da+sbTools.mm */; };
 		4FBC0AF92BBB06270064F1A6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FBC0AF82BBB06270064F1A6 /* QuartzCore.framework */; };
 		4FBC0AFB2BBB063E0064F1A6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FBC0AFA2BBB063E0064F1A6 /* CoreGraphics.framework */; };
+		4FBC0B532BBC5A410064F1A6 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FBC0B522BBC5A410064F1A6 /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		4FBC0AF52BB967D30064F1A6 /* da+sbTools.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "da+sbTools.hpp"; sourceTree = "<group>"; };
 		4FBC0AF82BBB06270064F1A6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.4.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		4FBC0AFA2BBB063E0064F1A6 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.4.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
+		4FBC0B522BBC5A410064F1A6 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.4.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -34,6 +36,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FBC0B532BBC5A410064F1A6 /* AVFoundation.framework in Frameworks */,
 				4FBC0AFB2BBB063E0064F1A6 /* CoreGraphics.framework in Frameworks */,
 				4FBC0AF92BBB06270064F1A6 /* QuartzCore.framework in Frameworks */,
 				4F625BC22BB81C8B0029C995 /* UIKit.framework in Frameworks */,
@@ -83,6 +86,7 @@
 		4F625BC02BB81C8B0029C995 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4FBC0B522BBC5A410064F1A6 /* AVFoundation.framework */,
 				4FBC0AFA2BBB063E0064F1A6 /* CoreGraphics.framework */,
 				4FBC0AF82BBB06270064F1A6 /* QuartzCore.framework */,
 				4F625BC12BB81C8B0029C995 /* UIKit.framework */,

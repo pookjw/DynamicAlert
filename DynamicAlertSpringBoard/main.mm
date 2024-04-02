@@ -10,8 +10,17 @@
 #import "da+sbTools.hpp"
 #import <objc/runtime.h>
 #import <objc/message.h>
+#import <AVFoundation/AVFoundation.h>
 
-// Swizzle -[SBSystemApertureSceneElement _updatePortalViews]
+void *isDAElementKey = &isDAElementKey;
+
+@interface PlayerView : UIView
+@end
+@implementation PlayerView
++ (Class)layerClass {
+    return AVPlayerLayer.class;
+}
+@end
 
 @interface ButtonViewController : UIViewController
 @end
@@ -34,24 +43,10 @@
         id activitySystemApertureElementObserver = da::defaultActivitySystemApertureElementObserver();
         id systemApertureManager = da::systemApertureManager();
         id activityDescriptor = da::makeTestActivityDescriptor();
+        id activityIdentifier = ((id (*)(id, SEL))objc_msgSend)(activityDescriptor, sel_registerName("activityIdentifier"));
         id activityContent = da::makeTestActivityContent();
         id activityContentUpdate = da::makeTestActivityContentUpdate(activityDescriptor, activityContent);
         id activityItem = da::makeTestActivityItem(activityContentUpdate);
-        
-        /*
-         FBSSceneClientSettings
-         -[FBSScene updateUIClientSettingsWithBlock:]
-         
-         SBUISA_specifiesPreferredPaddingForCompactLayout
-         SBUISA_preferredPaddingForCompactLayout : (0x31 << 16) + 0x6f0 = 3213040
-         SBUISA_preferredLeadingViewSize : 0x6e0 + (0x31 << 16) = 3213024
-         SBUISA_preferredTrailingViewSize : 0x6e1 + (0x31 << 16) = 3213025
-         SBUISA_customLayoutPreferredOutsetsFromUnsafeArea : 0x6e9 + (0x31 << 16) = 3213033
-         SBUISA_preferredMinimalViewSize : 0x6e2 + (0x31 << 16) = 3213026
-         SBUISA_preferredDetachedMinimalViewSize
-         SBUISA_launchURL
-         SBUISA_launchAction
-         */
         
         ((void (*)(id, SEL, id, id))objc_msgSend)(activitySystemApertureElementObserver, sel_registerName("_createAndActivateElementForActivityItem:completion:"), activityItem, ^void(BOOL success) {
             assert(success);
@@ -59,22 +54,12 @@
             NSArray *registeredElements = ((id (*)(id, SEL))objc_msgSend)(systemApertureManager, sel_registerName("registeredElements"));
             
             for (id element in registeredElements) {
-                id /* (FBScene *) */ fbScene = ((id (*)(id, SEL))objc_msgSend)(element, sel_registerName("scene"));
-//                id /* (FBSSceneClientSettings *) */ clientSettings = ((id (*)(id, SEL))objc_msgSend)(fbScene, sel_registerName("clientSettings"));
-                ((void (*)(id, SEL, id))objc_msgSend)(fbScene, sel_registerName("updateSettingsWithBlock:"), ^(id mutableSettings, Class) {
-                    id /* (BSMutableSettings *) */ otherSettings = ((id (*)(id, SEL))objc_msgSend)(mutableSettings, sel_registerName("otherSettings"));
-                    // SBUISA_setDirectionalEdgeInsets SBUISA_setCGSize
-                    ((void (*)(id, SEL, NSDirectionalEdgeInsets, NSUInteger))objc_msgSend)(otherSettings, sel_registerName("SBUISA_setDirectionalEdgeInsets:forSetting:"), NSDirectionalEdgeInsetsMake(0, 400.f, 400.f, 400.f), 3213033);
-                    ((void (*)(id, SEL, CGSize, NSUInteger))objc_msgSend)(otherSettings, sel_registerName("SBUISA_setCGSize:forSetting:"), CGSizeMake(400.f, 400.f), 3213024);
-                    ((void (*)(id, SEL, CGSize, NSUInteger))objc_msgSend)(otherSettings, sel_registerName("SBUISA_setCGSize:forSetting:"), CGSizeMake(400.f, 400.f), 3213025);
-                    ((void (*)(id, SEL, CGSize, NSUInteger))objc_msgSend)(otherSettings, sel_registerName("SBUISA_setCGSize:forSetting:"), CGSizeMake(400.f, 400.f), 3213026);
-                    
-                    // SBSystemApertureSceneElementTransitionParameters *
-                    ((void (*)(id, SEL, id, id))objc_msgSend)(element, sel_registerName("_updateMutableSceneSettings:withParameters:"), mutableSettings, nil);
-                });
+                NSString *elementIdentifier = ((id (*)(id, SEL))objc_msgSend)(element, sel_registerName("elementIdentifier"));
+                if (![elementIdentifier containsString:activityIdentifier]) {
+                    continue;
+                }
                 
-                id clientSettings = ((id (*)(id, SEL))objc_msgSend)(fbScene, sel_registerName("clientSettings"));
-                id otherSettings = ((id (*)(id, SEL))objc_msgSend)(clientSettings, sel_registerName("otherSettings"));
+                objc_setAssociatedObject(element, isDAElementKey, @YES, OBJC_ASSOCIATION_COPY_NONATOMIC);
                 
                 NSMutableArray<UIView *> *views = [NSMutableArray array];
                 
@@ -110,9 +95,18 @@
 //                            yellowView.backgroundColor = UIColor.cyanColor;
                         {
                             [yellowView release];
-                            yellowView = [UIActivityIndicatorView new];
-                            [(UIActivityIndicatorView *)yellowView startAnimating];
+                            AVQueuePlayer *player = [[AVQueuePlayer alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/pookjw/Desktop/video.mp4"]];
+                            AVPlayerLooper *looper = [[AVPlayerLooper alloc] initWithPlayer:player templateItem:player.currentItem timeRange:kCMTimeRangeInvalid];
+                            PlayerView *playerView = [PlayerView new];
+                            playerView.backgroundColor = [UIColor.blackColor colorWithAlphaComponent:0.5f];
+                            objc_setAssociatedObject(playerView, (void *)playerView, looper, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+                            [looper release];
+                            ((AVPlayerLayer *)playerView.layer).player = player;
+                            [player release];
+                            yellowView = playerView;
+                            [player play];
                         }
+                            break;
                         case 1:
                             yellowView.backgroundColor = UIColor.blueColor;
                             break;
@@ -141,16 +135,6 @@
                 }];
             }
         });
-        
-        /*
-         -[ACActivityDescriptor initWithIdentifier:target:presentationOptions:isEphemeral:createdDate:descriptorData:contentType:]
-         
-         NSString * (Random UUID), ACActivityDescriptor *, int (2), ACActivityContent *
-         -[ACActivityContentUpdate initWithIdentifier:descriptor:state:content:]
-         
-         -[SBActivityItem initWithContentUpdate:]
-         -[SBActivitySystemApertureElementObserver _createAndActivateElementForActivityItem:completion:]
-         */
     }];
     
     UIButton *button = [UIButton buttonWithConfiguration:buttonConfiguration primaryAction:primaryAction];
@@ -186,93 +170,97 @@ static id custom(Class cls, SEL _cmd, id fbScene, BOOL create, id session, id co
 }
 }
 
-namespace da_ACActivityDescriptor {
-namespace initWithIdentifier_target_presentationOptions_isEphemeral_createdDate_descriptorData_contentType {
-static id (*original)(id self, SEL _cmd, id identifier, id target, id presentationOptions, BOOL isEphemeral, NSDate *createdDate, NSData *descriptorData, NSUInteger contentType);
-static id custom(id self, SEL _cmd, id identifier, id target, id presentationOptions, BOOL isEphemeral, NSDate *createdDate, NSData *descriptorData, NSUInteger contentType) {
-    NSDictionary *dic = ((id (*)(Class, SEL, id))objc_msgSend)(NSDictionary.class, sel_registerName("dictionaryWithPlistData:"), descriptorData);
-    NSData *attributesData = dic[@"attributesData"];
-//    NSDictionary *attributes = ((id (*)(Class, SEL, id))objc_msgSend)(NSDictionary.class, sel_registerName("dictionaryWithPlistData:"), attributesData);
-    NSError * _Nullable error = nil;
-    id jsonObject = [NSJSONSerialization JSONObjectWithData:attributesData options:NSJSONReadingJSON5Allowed error:&error];
-    
-    return original(self, _cmd, identifier, target, presentationOptions, isEphemeral, createdDate, descriptorData, contentType);
-}
-}
-}
-
-namespace da_ACActivityContent {
-namespace initWithContentData_staleDate_relevanceScore {
-static id (*original)(id self, SEL _cmd, id contentData, NSDate *staleDate, double relevanceScore);
-static id custom(id self, SEL _cmd, id contentData, NSDate *staleDate, double relevanceScore) {
-    NSError * _Nullable error = nil;
-    id jsonObject = [NSJSONSerialization JSONObjectWithData:contentData options:NSJSONReadingJSON5Allowed error:&error];
-    
-    return original(self, _cmd, contentData, staleDate, relevanceScore);
-}
-}
-}
-
-namespace da_SBSystemApertureSceneElementAccessoryView {
-namespace _configurePortalView {
-static void (*original)(id self, SEL _cmd);
+namespace da_SBSystemApertureSceneElement {
+namespace _updatePortalViews {
+static void (*original)(id, SEL);
 static void custom(id self, SEL _cmd) {
+    BOOL flag = ((NSNumber *)objc_getAssociatedObject(self, isDAElementKey)).boolValue;
     
+    if (flag) {
+        __kindof UIView *leadingView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("leadingView"));
+        ((void (*)(id, SEL, CGSize))objc_msgSend)(leadingView, sel_registerName("setPreferredSize:"), CGSizeMake(40.f, 40.f));
+        __kindof UIView *leadingPortalView = ((id (*)(id, SEL))objc_msgSend)(leadingView, sel_registerName("portalView"));
+        leadingPortalView.hidden = YES;
+        
+        __kindof UIView *trailingView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("trailingView"));
+        ((void (*)(id, SEL, CGSize))objc_msgSend)(trailingView, sel_registerName("setPreferredSize:"), CGSizeMake(40.f, 40.f));
+        __kindof UIView *trailingPortalView = ((id (*)(id, SEL))objc_msgSend)(trailingView, sel_registerName("portalView"));
+        trailingPortalView.hidden = YES;
+        
+        __kindof UIView *minimalView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("minimalView"));
+        ((void (*)(id, SEL, CGSize))objc_msgSend)(minimalView, sel_registerName("setPreferredSize:"), CGSizeMake(40.f, 40.f));
+        __kindof UIView *minimalPortalView = ((id (*)(id, SEL))objc_msgSend)(minimalView, sel_registerName("portalView"));
+        minimalPortalView.hidden = YES;
+        
+        __kindof UIView *detachedMinimalView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("detachedMinimalView"));
+        ((void (*)(id, SEL, CGSize))objc_msgSend)(detachedMinimalView, sel_registerName("setPreferredSize:"), CGSizeMake(40.f, 40.f));
+        __kindof UIView *detachedMinimalPortalView = ((id (*)(id, SEL))objc_msgSend)(detachedMinimalView, sel_registerName("portalView"));
+        detachedMinimalPortalView.hidden = YES;
+    } else {
+        original(self, _cmd);
+    }
+}
+}
+
+namespace _sizeForSceneView {
+static CGSize (*original)(id, SEL);
+static CGSize custom(id self, SEL _cmd) {
+    BOOL flag = ((NSNumber *)objc_getAssociatedObject(self, isDAElementKey)).boolValue;
+    
+    if (flag) {
+        return CGSizeMake(400.f, 300.f);
+    } else {
+        return original(self, _cmd);
+    }
 }
 }
 }
 
-namespace da_SBSAContainerViewDescription {
-namespace contentBounds {
-static CGRect (*original)(id self, SEL _cmd);
-static CGRect custom(id self, SEL _cmd) {
-    return CGRectMake(0.f, 0.f, 200.f, 200.f);
+namespace da_SBSystemApertureContainerView {
+namespace setContentClippingEnabled {
+static void (*original)(id, SEL, BOOL);
+static void custom(id self, SEL _cmd, BOOL isContentClippingEnabled) {
+    __kindof UIViewController * /* (SAUIElementViewController *) */ elementViewController = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("elementViewController"));
+    id /* (SBSystemApertureSceneElement */ elementViewProvider = ((id (*)(id, SEL))objc_msgSend)(elementViewController, sel_registerName("elementViewProvider"));
+    BOOL flag = ((NSNumber *)objc_getAssociatedObject(elementViewProvider, isDAElementKey)).boolValue;
+    
+    if (flag) {
+        original(self, _cmd, NO);
+    } else {
+        original(self, _cmd, isContentClippingEnabled);
+    }
 }
 }
 }
 
-namespace da_SBSAContainerViewDescription {
-namespace _setContentBounds {
-static void (*original)(id self, SEL _cmd, CGRect);
-static void custom(id self, SEL _cmd, CGRect) {
-    original(self, _cmd, CGRectMake(0.f, 0.f, 200.f, 200.f));
-}
-}
-}
-
-namespace da_SBSAViewDescription {
-namespace bounds {
-static CGRect (*original)(id self, SEL _cmd);
-static CGRect custom(id self, SEL _cmd) {
-    return CGRectMake(0.f, 0.f, 407.33333333333331, 200.f);
-}
-}
-}
-namespace da_SBSAViewDescription {
-namespace center {
-static CGPoint (*original)(id self, SEL _cmd);
-static CGPoint custom(id self, SEL _cmd) {
-    return CGPointMake(200.f, 100.f);
-}
+namespace da_SAUIElementViewController {
+namespace setCustomContentAlpha {
+static void (*original)(id, SEL, CGFloat);
+static void custom(id self, SEL _cmd, CGFloat alpha) {
+    id /* (SBSystemApertureSceneElement */ elementViewProvider = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("elementViewProvider"));
+    BOOL flag = ((NSNumber *)objc_getAssociatedObject(elementViewProvider, isDAElementKey)).boolValue;
+    
+//    if (flag) {
+//        original(self, _cmd, 1.f);
+//    } else {
+//        original(self, _cmd, alpha);
+//    }
+    original(self, _cmd, alpha);
 }
 }
 
-namespace da_SBSAViewDescription {
-namespace _setCenter {
-static void (*original)(id self, SEL _cmd, CGPoint);
-static void custom(id self, SEL _cmd, CGPoint center) {
-    NSLog(@"Foo: %@", NSStringFromCGPoint(center));
-    original(self, _cmd, CGPointMake(215, 33.333333333333336));
-}
-}
-}
-
-namespace da_SBSAViewDescription {
-namespace _setBounds {
-static void (*original)(id self, SEL _cmd, CGRect);
-static void custom(id self, SEL _cmd, CGRect bounds) {
-    NSLog(@"Foo: %@", NSStringFromCGRect(bounds));
-    original(self, _cmd, CGRectMake(0.f, 0.f, 200.f, 100.f));
+namespace setCustomContentBlurProgress {
+static void (*original)(id, SEL, CGFloat);
+static void custom(id self, SEL _cmd, CGFloat alpha) {
+    id /* (SBSystemApertureSceneElement */ elementViewProvider = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("elementViewProvider"));
+    BOOL flag = ((NSNumber *)objc_getAssociatedObject(elementViewProvider, isDAElementKey)).boolValue;
+    
+//    if (flag) {
+//        original(self, _cmd, 0.f);
+//    } else {
+//        original(self, _cmd, alpha);
+//    }
+    original(self, _cmd, alpha);
 }
 }
 }
@@ -280,20 +268,13 @@ static void custom(id self, SEL _cmd, CGRect bounds) {
 __attribute__((constructor)) static void init() {
     da::hookMessage(UIScene.class, sel_registerName("_sceneForFBSScene:create:withSession:connectionOptions:"), NO, (IMP)(&da_UIScene::_sceneForFBSScene_create_withSession_connectionOptions::custom), (IMP *)(&da_UIScene::_sceneForFBSScene_create_withSession_connectionOptions::original));
     
-    da::hookMessage(objc_lookUpClass("ACActivityDescriptor"), sel_registerName("initWithIdentifier:target:presentationOptions:isEphemeral:createdDate:descriptorData:contentType:"), YES, (IMP)(&da_ACActivityDescriptor::initWithIdentifier_target_presentationOptions_isEphemeral_createdDate_descriptorData_contentType::custom), (IMP *)(&da_ACActivityDescriptor::initWithIdentifier_target_presentationOptions_isEphemeral_createdDate_descriptorData_contentType::original));
+    da::hookMessage(objc_lookUpClass("SBSystemApertureSceneElement"), sel_registerName("_updatePortalViews"), YES, (IMP)(&da_SBSystemApertureSceneElement::_updatePortalViews::custom), (IMP *)(&da_SBSystemApertureSceneElement::_updatePortalViews::original));
     
-    da::hookMessage(objc_lookUpClass("ACActivityContent"), sel_registerName("initWithContentData:staleDate:relevanceScore:"), YES, (IMP)(&da_ACActivityContent::initWithContentData_staleDate_relevanceScore::custom), (IMP *)(&da_ACActivityContent::initWithContentData_staleDate_relevanceScore::original));
+    da::hookMessage(objc_lookUpClass("SBSystemApertureSceneElement"), sel_registerName("_sizeForSceneView"), YES, (IMP)(&da_SBSystemApertureSceneElement::_sizeForSceneView::custom), (IMP *)(&da_SBSystemApertureSceneElement::_sizeForSceneView::original));
     
-//    da::hookMessage(objc_lookUpClass("SBSystemApertureSceneElementAccessoryView"), sel_registerName("_configurePortalView"), YES, (IMP)(&da_SBSystemApertureSceneElementAccessoryView::_configurePortalView::custom), (IMP *)(&da_SBSystemApertureSceneElementAccessoryView::_configurePortalView::original));
+    da::hookMessage(objc_lookUpClass("SBSystemApertureContainerView"), sel_registerName("setContentClippingEnabled:"), YES, (IMP)(&da_SBSystemApertureContainerView::setContentClippingEnabled::custom), (IMP *)(&da_SBSystemApertureContainerView::setContentClippingEnabled::original));
     
-//    da::hookMessage(objc_lookUpClass("SBSAContainerViewDescription"), sel_registerName("contentBounds"), YES, (IMP)(&da_SBSAContainerViewDescription::contentBounds::custom), (IMP *)(&da_SBSAContainerViewDescription::contentBounds::original));
-//    
-//    da::hookMessage(objc_lookUpClass("SBSAContainerViewDescription"), sel_registerName("_setContentBounds:"), YES, (IMP)(&da_SBSAContainerViewDescription::_setContentBounds::custom), (IMP *)(&da_SBSAContainerViewDescription::_setContentBounds::original));
+    da::hookMessage(objc_lookUpClass("SAUIElementViewController"), sel_registerName("setCustomContentAlpha:"), YES, (IMP)(&da_SAUIElementViewController::setCustomContentAlpha::custom), (IMP *)(&da_SAUIElementViewController::setCustomContentAlpha::original));
     
-//    da::hookMessage(objc_lookUpClass("SBSAViewDescription"), sel_registerName("center"), YES, (IMP)(&da_SBSAViewDescription::center::custom), (IMP *)(&da_SBSAViewDescription::center::original));
-//    da::hookMessage(objc_lookUpClass("SBSAViewDescription"), sel_registerName("bounds"), YES, (IMP)(&da_SBSAViewDescription::bounds::custom), (IMP *)(&da_SBSAViewDescription::bounds::original));
-    
-//    da::hookMessage(objc_lookUpClass("SBSAViewDescription"), sel_registerName("_setCenter:"), YES, (IMP)(&da_SBSAViewDescription::_setCenter::custom), (IMP *)(&da_SBSAViewDescription::_setCenter::original));
-    
-//    da::hookMessage(objc_lookUpClass("SBSAViewDescription"), sel_registerName("_setBounds:"), YES, (IMP)(&da_SBSAViewDescription::_setBounds::custom), (IMP *)(&da_SBSAViewDescription::_setBounds::original));
+    da::hookMessage(objc_lookUpClass("SAUIElementViewController"), sel_registerName("setCustomContentBlurProgress:"), YES, (IMP)(&da_SAUIElementViewController::setCustomContentBlurProgress::custom), (IMP *)(&da_SAUIElementViewController::setCustomContentBlurProgress::original));
 }
