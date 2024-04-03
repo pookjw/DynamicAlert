@@ -9,6 +9,11 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 
+void *da::getIsDAElementKey() {
+    static void *key = &key;
+    return key;
+}
+
 id da::systemApertureControllerForMainDisplay() {
     // Home Button 같은 버튼들의 Action을 가지고 있음
     return ((id (*)(id, SEL))objc_msgSend)(UIApplication.sharedApplication, sel_registerName("systemApertureControllerForMainDisplay"));
@@ -251,4 +256,93 @@ id da::makeSystemApertureSceneElement(id scene, id systemApertureController, voi
     id result = ((id (*)(id, SEL, id, id, id))objc_msgSend)([objc_lookUpClass("SBSystemApertureSceneElement") alloc], sel_registerName("initWithScene:statusBarBackgroundActivitiesSuppresser:readyForPresentationHandler:"), scene, systemApertureController, readyForPresentationHandler);
     
     return [result autorelease];
+}
+
+BOOL da::isDAElementFromSystemApertureSceneElement(id systemApertureSceneElement) {
+    BOOL flag = ((NSNumber *)objc_getAssociatedObject(systemApertureSceneElement, da::getIsDAElementKey())).boolValue;
+    return flag;
+}
+
+id da::systemApertureSceneElementFromActivityIdentifier(NSString * _Nonnull activityIdentifier) {
+    id systemApertureManager = da::systemApertureManager();
+    
+    NSArray *registeredElements = ((id (*)(id, SEL))objc_msgSend)(systemApertureManager, sel_registerName("registeredElements"));
+    
+    if (registeredElements.count == 0) return nil;
+    
+    for (id element in registeredElements) {
+        NSString *elementIdentifier = ((id (*)(id, SEL))objc_msgSend)(element, sel_registerName("elementIdentifier"));
+        
+        if ([elementIdentifier containsString:activityIdentifier]) {
+            return element;
+        }
+    }
+    
+    return nil;
+}
+
+id da::systemApertureSceneElementFromElementDescription(id elementDescription) {
+    id systemApertureManager = da::systemApertureManager();
+    
+    NSArray *registeredElements = ((id (*)(id, SEL))objc_msgSend)(systemApertureManager, sel_registerName("registeredElements"));
+    
+    if (registeredElements.count == 0) return nil;
+    
+    id associatedSystemApertureElementIdentity = ((id (*)(id, SEL))objc_msgSend)(elementDescription, sel_registerName("associatedSystemApertureElementIdentity"));
+    NSString *targetElementIdentifier = ((id (*)(id, SEL))objc_msgSend)(associatedSystemApertureElementIdentity, sel_registerName("elementIdentifier"));
+    
+    for (id element in registeredElements) {
+        NSString *elementIdentifier = ((id (*)(id, SEL))objc_msgSend)(element, sel_registerName("elementIdentifier"));
+        
+        if ([elementIdentifier isEqualToString:targetElementIdentifier]) {
+            return element;
+        }
+    }
+    
+    return nil;
+}
+
+BOOL da::isDAElementFromElementDescription(id elementDescription) {
+    id element = da::systemApertureSceneElementFromElementDescription(elementDescription);
+    
+    BOOL flag = ((NSNumber *)objc_getAssociatedObject(element, da::getIsDAElementKey())).boolValue;
+    
+    return flag;
+}
+
+id da::systemApertureSceneElementFromContainerViewDescription(id containerViewDescription) {
+    id systemApertureManager = da::systemApertureManager();
+    
+    NSArray *registeredElements = ((id (*)(id, SEL))objc_msgSend)(systemApertureManager, sel_registerName("registeredElements"));
+    
+    if (registeredElements.count == 0) return nil;
+    
+    id associatedSystemApertureElementIdentity = ((id (*)(id, SEL))objc_msgSend)(containerViewDescription, sel_registerName("associatedSystemApertureElementIdentity"));
+    NSString *targetElementIdentifier = ((id (*)(id, SEL))objc_msgSend)(associatedSystemApertureElementIdentity, sel_registerName("elementIdentifier"));
+    
+    for (id element in registeredElements) {
+        NSString *elementIdentifier = ((id (*)(id, SEL))objc_msgSend)(element, sel_registerName("elementIdentifier"));
+        
+        if ([elementIdentifier isEqualToString:targetElementIdentifier]) {
+            return element;
+        }
+    }
+    
+    return nil;
+}
+
+BOOL da::isDAElementFromContainerViewDescription(id  _Nonnull containerViewDescription) {
+    id element = da::systemApertureSceneElementFromContainerViewDescription(containerViewDescription);
+    
+    BOOL flag = ((NSNumber *)objc_getAssociatedObject(element, da::getIsDAElementKey())).boolValue;
+    
+    return flag;
+}
+
+NSUInteger da::layoutModeFromElementDescription(id  _Nonnull elementDescription) {
+    id element = da::systemApertureSceneElementFromElementDescription(elementDescription);
+    
+    NSUInteger layoutMode = ((NSUInteger (*)(id, SEL))objc_msgSend)(element, sel_registerName("layoutMode"));
+    
+    return layoutMode;
 }

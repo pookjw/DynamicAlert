@@ -1,0 +1,72 @@
+
+namespace da_SBSystemApertureContainerView {
+
+namespace da_SAUIElementViewController {
+namespace setCustomContentAlpha {
+static void (*original)(id, SEL, CGFloat);
+static void custom(id self, SEL _cmd, CGFloat alpha) {
+    id /* (SBSystemApertureSceneElement */ elementViewProvider = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("elementViewProvider"));
+    BOOL flag = ((NSNumber *)objc_getAssociatedObject(elementViewProvider, da::getIsDAElementKey())).boolValue;
+    
+    if (flag) {
+        NSUInteger layoutMode = ((long (*)(id, SEL))objc_msgSend)(self, sel_registerName("layoutMode"));
+        
+        if (layoutMode == 3) {
+            original(self, _cmd, 1.f);
+        } else {
+            original(self, _cmd, alpha);
+        }
+    } else {
+        original(self, _cmd, alpha);
+    }
+}
+}
+
+namespace setCustomContentBlurProgress {
+static void (*original)(id, SEL, CGFloat);
+static void custom(id self, SEL _cmd, CGFloat progress) {
+    id /* (SBSystemApertureSceneElement */ elementViewProvider = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("elementViewProvider"));
+    BOOL flag = ((NSNumber *)objc_getAssociatedObject(elementViewProvider, da::getIsDAElementKey())).boolValue;
+    
+    if (flag) {
+        NSUInteger layoutMode = ((long (*)(id, SEL))objc_msgSend)(self, sel_registerName("layoutMode"));
+        
+        if (layoutMode == 3) {
+            original(self, _cmd, 0.f);
+        } else {
+            original(self, _cmd, progress);
+        }
+    } else {
+        original(self, _cmd, progress);
+    }
+}
+}
+}
+
+namespace da_SAUILayoutSpecifyingElementViewController {
+namespace setSensorObscuringShadowProgress {
+static void (*original)(id, SEL, CGFloat);
+static void custom(id self, SEL _cmd, CGFloat progress) {
+    id /* (SBSystemApertureSceneElement */ elementViewProvider = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("elementViewProvider"));
+    BOOL flag = ((NSNumber *)objc_getAssociatedObject(elementViewProvider, da::getIsDAElementKey())).boolValue;
+    
+    if (flag) {
+        NSUInteger layoutMode = ((long (*)(id, SEL))objc_msgSend)(self, sel_registerName("layoutMode"));
+        
+        if (layoutMode == 3) {
+            original(self, _cmd, 0.f);
+        } else {
+            original(self, _cmd, progress);
+        }
+    } else {
+        original(self, _cmd, progress);
+    }
+}
+}
+}
+    
+//    da::hookMessage(objc_lookUpClass("SAUIElementViewController"), sel_registerName("setCustomContentAlpha:"), YES, (IMP)(&da_SAUIElementViewController::setCustomContentAlpha::custom), (IMP *)(&da_SAUIElementViewController::setCustomContentAlpha::original));
+//    
+//    da::hookMessage(objc_lookUpClass("SAUIElementViewController"), sel_registerName("setCustomContentBlurProgress:"), YES, (IMP)(&da_SAUIElementViewController::setCustomContentBlurProgress::custom), (IMP *)(&da_SAUIElementViewController::setCustomContentBlurProgress::original));
+//    
+//    da::hookMessage(objc_lookUpClass("SAUILayoutSpecifyingElementViewController"), sel_registerName("setSensorObscuringShadowProgress:"), YES, (IMP)(&da_SAUILayoutSpecifyingElementViewController::setSensorObscuringShadowProgress::custom), (IMP *)(&da_SAUILayoutSpecifyingElementViewController::setSensorObscuringShadowProgress::original));

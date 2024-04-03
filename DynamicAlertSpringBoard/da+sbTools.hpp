@@ -11,6 +11,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 namespace da {
 
+void *getIsDAElementKey();
+
 id /* (SBSystemApertureController *) */ systemApertureControllerForMainDisplay();
 
 __kindof UIViewController * /* (SBSystemApertureViewController *) */ systemApertureViewController();
@@ -30,6 +32,20 @@ id /* (SBActivityItem *) */ makeTestActivityItem(id /* (ACActivityContentUpdate 
 id /* (ACUISSystemApertureSceneHandle *) */ makeSystemApertureSceneHandleWithItem(id /* (SBActivityItem *) */ activityItem);
 
 id /* (SBSystemApertureSceneElement *) */ makeSystemApertureSceneElement(id /* (FBScene *) */ scene, id /* (SBSystemApertureController *) */ systemApertureController, void (^readyForPresentationHandler)(id /* (SBSystemApertureSceneElement *) */ element, BOOL success));
+
+BOOL isDAElementFromSystemApertureSceneElement(id /* (SBSystemApertureSceneElement *) */ systemApertureSceneElement);
+
+id _Nullable /* (SBSystemApertureSceneElement *) */ systemApertureSceneElementFromActivityIdentifier(NSString *activityIdentifier);
+
+id _Nullable /* (SBSystemApertureSceneElement *) */ systemApertureSceneElementFromElementDescription(id /* (SBSAElementDescription *) */ elementDescription);
+
+BOOL isDAElementFromElementDescription(id /* (SBSAElementDescription *) */ elementDescription);
+
+id _Nullable /* (SBSystemApertureSceneElement *) */ systemApertureSceneElementFromContainerViewDescription(id /* (SBSAContainerViewDescription *) */ containerViewDescription);
+
+BOOL isDAElementFromContainerViewDescription(id /* (SBSAContainerViewDescription *) */ containerViewDescription);
+
+NSUInteger layoutModeFromElementDescription(id /* (SBSAElementDescription *) */ elementDescription);
 
 }
 

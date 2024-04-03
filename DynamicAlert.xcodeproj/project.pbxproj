@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F5708372BBDAEBF000037D4 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FBC0B522BBC5A410064F1A6 /* AVFoundation.framework */; };
+		4F5708392BBDB814000037D4 /* File in Resources */ = {isa = PBXBuildFile; fileRef = 4F5708382BBDB814000037D4 /* File */; };
 		4F625BB92BB8124F0029C995 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4F625BB82BB8124F0029C995 /* main.mm */; };
 		4F625BBE2BB81B710029C995 /* da+hook.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4F625BBD2BB81B710029C995 /* da+hook.hpp */; };
 		4F625BBF2BB81B710029C995 /* da+hook.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4F625BBC2BB81B710029C995 /* da+hook.mm */; };
@@ -15,10 +17,10 @@
 		4FBC0AF72BB967D30064F1A6 /* da+sbTools.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4FBC0AF42BB967D30064F1A6 /* da+sbTools.mm */; };
 		4FBC0AF92BBB06270064F1A6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FBC0AF82BBB06270064F1A6 /* QuartzCore.framework */; };
 		4FBC0AFB2BBB063E0064F1A6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FBC0AFA2BBB063E0064F1A6 /* CoreGraphics.framework */; };
-		4FBC0B532BBC5A410064F1A6 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FBC0B522BBC5A410064F1A6 /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4F5708382BBDB814000037D4 /* File */ = {isa = PBXFileReference; lastKnownFileType = text; path = File; sourceTree = "<group>"; };
 		4F625BB12BB811E00029C995 /* DynamicAlertSpringBoard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DynamicAlertSpringBoard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F625BB82BB8124F0029C995 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		4F625BBC2BB81B710029C995 /* da+hook.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "da+hook.mm"; sourceTree = "<group>"; };
@@ -36,7 +38,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4FBC0B532BBC5A410064F1A6 /* AVFoundation.framework in Frameworks */,
+				4F5708372BBDAEBF000037D4 /* AVFoundation.framework in Frameworks */,
 				4FBC0AFB2BBB063E0064F1A6 /* CoreGraphics.framework in Frameworks */,
 				4FBC0AF92BBB06270064F1A6 /* QuartzCore.framework in Frameworks */,
 				4F625BC22BB81C8B0029C995 /* UIKit.framework in Frameworks */,
@@ -70,6 +72,7 @@
 				4F625BB82BB8124F0029C995 /* main.mm */,
 				4FBC0AF52BB967D30064F1A6 /* da+sbTools.hpp */,
 				4FBC0AF42BB967D30064F1A6 /* da+sbTools.mm */,
+				4F5708382BBDB814000037D4 /* File */,
 			);
 			path = DynamicAlertSpringBoard;
 			sourceTree = "<group>";
@@ -169,6 +172,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F5708392BBDB814000037D4 /* File in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
