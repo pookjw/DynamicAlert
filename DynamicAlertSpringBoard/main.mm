@@ -370,11 +370,11 @@ __attribute__((constructor)) static void init() {
     
 //    da::hookMessage(objc_lookUpClass("SBSystemApertureContainerView"), sel_registerName("setContentClippingEnabled:"), YES, (IMP)(&da_SBSystemApertureContainerView::setContentClippingEnabled::custom), (IMP *)(&da_SBSystemApertureContainerView::setContentClippingEnabled::original));
     
-    da::hookMessage(objc_lookUpClass("SBSAElementDescription"), sel_registerName("customContentAlpha"), YES, (IMP)(&da_SBSAElementDescription::customContentAlpha::custom), (IMP *)(&da_SBSAElementDescription::customContentAlpha::original));
-    
-    da::hookMessage(objc_lookUpClass("SBSAElementDescription"), sel_registerName("customContentBlurProgress"), YES, (IMP)(&da_SBSAElementDescription::customContentBlurProgress::custom), (IMP *)(&da_SBSAElementDescription::customContentBlurProgress::original));
-    
-    da::hookMessage(objc_lookUpClass("SBSAElementDescription"), sel_registerName("sensorObscuringShadowProgress"), YES, (IMP)(&da_SBSAElementDescription::sensorObscuringShadowProgress::custom), (IMP *)(&da_SBSAElementDescription::sensorObscuringShadowProgress::original));
+//    da::hookMessage(objc_lookUpClass("SBSAElementDescription"), sel_registerName("customContentAlpha"), YES, (IMP)(&da_SBSAElementDescription::customContentAlpha::custom), (IMP *)(&da_SBSAElementDescription::customContentAlpha::original));
+//    
+//    da::hookMessage(objc_lookUpClass("SBSAElementDescription"), sel_registerName("customContentBlurProgress"), YES, (IMP)(&da_SBSAElementDescription::customContentBlurProgress::custom), (IMP *)(&da_SBSAElementDescription::customContentBlurProgress::original));
+//    
+//    da::hookMessage(objc_lookUpClass("SBSAElementDescription"), sel_registerName("sensorObscuringShadowProgress"), YES, (IMP)(&da_SBSAElementDescription::sensorObscuringShadowProgress::custom), (IMP *)(&da_SBSAElementDescription::sensorObscuringShadowProgress::original));
     
     da::hookMessage(objc_lookUpClass("SBSAContainerViewDescription"), sel_registerName("contentBounds"), YES, (IMP)(&da_SBSAContainerViewDescription::contentBounds::custom), (IMP *)(&da_SBSAContainerViewDescription::contentBounds::original));
     
