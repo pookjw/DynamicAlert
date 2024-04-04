@@ -189,3 +189,41 @@ static CGFloat custom(id self, SEL _cmd) {
 //    da::hookMessage(objc_lookUpClass("SBSAElementDescription"), sel_registerName("customContentBlurProgress"), YES, (IMP)(&da_SBSAElementDescription::customContentBlurProgress::custom), (IMP *)(&da_SBSAElementDescription::customContentBlurProgress::original));
 //    
 //    da::hookMessage(objc_lookUpClass("SBSAElementDescription"), sel_registerName("sensorObscuringShadowProgress"), YES, (IMP)(&da_SBSAElementDescription::sensorObscuringShadowProgress::custom), (IMP *)(&da_SBSAElementDescription::sensorObscuringShadowProgress::original));
+
+/*
+        FBSSceneClientSettings
+        -[FBSScene updateUIClientSettingsWithBlock:]
+        
+        SBUISA_specifiesPreferredPaddingForCompactLayout
+        SBUISA_preferredPaddingForCompactLayout : (0x31 << 16) + 0x6f0 = 3213040
+        SBUISA_preferredLeadingViewSize : 0x6e0 + (0x31 << 16) = 3213024
+        SBUISA_preferredTrailingViewSize : 0x6e1 + (0x31 << 16) = 3213025
+        SBUISA_customLayoutPreferredOutsetsFromUnsafeArea : 0x6e9 + (0x31 << 16) = 3213033
+        SBUISA_preferredMinimalViewSize : 0x6e2 + (0x31 << 16) = 3213026
+        SBUISA_preferredDetachedMinimalViewSize
+        SBUISA_launchURL
+        SBUISA_launchAction
+        */
+       
+       ((void (*)(id, SEL, id, id))objc_msgSend)(activitySystemApertureElementObserver, sel_registerName("_createAndActivateElementForActivityItem:completion:"), activityItem, ^void(BOOL success) {
+           assert(success);
+           
+           NSArray *registeredElements = ((id (*)(id, SEL))objc_msgSend)(systemApertureManager, sel_registerName("registeredElements"));
+           
+           for (id element in registeredElements) {
+               id /* (FBScene *) */ fbScene = ((id (*)(id, SEL))objc_msgSend)(element, sel_registerName("scene"));
+//                id /* (FBSSceneClientSettings *) */ clientSettings = ((id (*)(id, SEL))objc_msgSend)(fbScene, sel_registerName("clientSettings"));
+               ((void (*)(id, SEL, id))objc_msgSend)(fbScene, sel_registerName("updateSettingsWithBlock:"), ^(id mutableSettings, Class) {
+                   id /* (BSMutableSettings *) */ otherSettings = ((id (*)(id, SEL))objc_msgSend)(mutableSettings, sel_registerName("otherSettings"));
+                   // SBUISA_setDirectionalEdgeInsets SBUISA_setCGSize
+                   ((void (*)(id, SEL, NSDirectionalEdgeInsets, NSUInteger))objc_msgSend)(otherSettings, sel_registerName("SBUISA_setDirectionalEdgeInsets:forSetting:"), NSDirectionalEdgeInsetsMake(0, 400.f, 400.f, 400.f), 3213033);
+                   ((void (*)(id, SEL, CGSize, NSUInteger))objc_msgSend)(otherSettings, sel_registerName("SBUISA_setCGSize:forSetting:"), CGSizeMake(400.f, 400.f), 3213024);
+                   ((void (*)(id, SEL, CGSize, NSUInteger))objc_msgSend)(otherSettings, sel_registerName("SBUISA_setCGSize:forSetting:"), CGSizeMake(400.f, 400.f), 3213025);
+                   ((void (*)(id, SEL, CGSize, NSUInteger))objc_msgSend)(otherSettings, sel_registerName("SBUISA_setCGSize:forSetting:"), CGSizeMake(400.f, 400.f), 3213026);
+                   
+                   // SBSystemApertureSceneElementTransitionParameters *
+                   ((void (*)(id, SEL, id, id))objc_msgSend)(element, sel_registerName("_updateMutableSceneSettings:withParameters:"), mutableSettings, nil);
+               });
+               
+               id clientSettings = ((id (*)(id, SEL))objc_msgSend)(fbScene, sel_registerName("clientSettings"));
+               id otherSettings = ((id (*)(id, SEL))objc_msgSend)(clientSettings, sel_registerName("otherSettings"));
