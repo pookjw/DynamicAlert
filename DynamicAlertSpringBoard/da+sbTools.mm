@@ -14,6 +14,15 @@ void *da::getIsDAElementKey() {
     return key;
 }
 
+id da::context() {
+    id systemApertureViewController = da::systemApertureViewController();
+    id childViewControllers;
+    object_getInstanceVariable(systemApertureViewController, "_childViewControllers", (void **)&childViewControllers);
+    id context = ((id (*)(id, SEL, id))objc_msgSend)(systemApertureViewController, sel_registerName("_contextWithOrderedElementViewControllers:"), childViewControllers);
+    
+    return context;
+}
+
 id da::systemApertureControllerForMainDisplay() {
     // Home Button 같은 버튼들의 Action을 가지고 있음
     return ((id (*)(id, SEL))objc_msgSend)(UIApplication.sharedApplication, sel_registerName("systemApertureControllerForMainDisplay"));

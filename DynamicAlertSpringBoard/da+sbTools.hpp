@@ -13,6 +13,8 @@ namespace da {
 
 void *getIsDAElementKey();
 
+id /* (SBSAContext *) */ context();
+
 id /* (SBSystemApertureController *) */ systemApertureControllerForMainDisplay();
 
 __kindof UIViewController * /* (SBSystemApertureViewController *) */ systemApertureViewController();
