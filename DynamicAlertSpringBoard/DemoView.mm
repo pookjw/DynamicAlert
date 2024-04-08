@@ -53,7 +53,6 @@ __attribute__((objc_direct_members))
 - (void)dealloc {
     [_queuePlayer release];
     [_playerLooper release];
-    [_systemApertureSceneElement release];
     [_menuButton release];
     [super dealloc];
 }
@@ -90,24 +89,21 @@ __attribute__((objc_direct_members))
     __weak auto weakSelf = self;
     
     UIAction *popAction = [UIAction actionWithTitle:@"Pop" image:[UIImage systemImageNamed:@"ev.plug.dc.nacs.fill"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
-//        ((void (*)(id, SEL))objc_msgSend)(weakSelf.systemApertureSceneElement, sel_registerName("invalidate"));
-        id systemApertureManager = da::systemApertureManager();
-        __kindof UIViewController *elementViewController = ((id (*)(id, SEL, id))objc_msgSend)(systemApertureManager, sel_registerName("elementViewControllerForElement:"), weakSelf.systemApertureSceneElement);
-        ((void (*)(id, SEL, NSUInteger, NSUInteger))objc_msgSend)(elementViewController, sel_registerName("setLayoutMode:reason:"), 2, 1);
-        ((void (*)(id, SEL, NSUInteger, NSUInteger))objc_msgSend)(weakSelf.systemApertureSceneElement, sel_registerName("setLayoutMode:reason:"), 2, 1);
+        id systemApertureSceneElement = weakSelf.systemApertureSceneElement;
         
-        // SAUIElementViewController setLayoutMode:(long)arg1 reason:(l
+        id layoutSpecifyingOverrider = ((id (*)(id, SEL))objc_msgSend)(systemApertureSceneElement, sel_registerName("systemApertureLayoutSpecifyingOverrider"));
+        
+        ((void (*)(id, SEL, NSUInteger, NSUInteger))objc_msgSend)(layoutSpecifyingOverrider, sel_registerName("setLayoutMode:reason:"), 0, 1);
     }];
     
     UIAction *removeAction = [UIAction actionWithTitle:@"Remove" image:[UIImage systemImageNamed:@"trash"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
-        id systemApertureManager = da::systemApertureManager();
-        ((void (*)(id, SEL, id))objc_msgSend)(systemApertureManager, sel_registerName("_removeAssertionForElement:"), weakSelf.systemApertureSceneElement);
-        __kindof UIViewController *elementViewController = ((id (*)(id, SEL, id))objc_msgSend)(systemApertureManager, sel_registerName("elementViewControllerForElement:"), weakSelf.systemApertureSceneElement);
-        ((void (*)(id, SEL, NSUInteger, NSUInteger))objc_msgSend)(elementViewController, sel_registerName("setLayoutMode:reason:"), 2, 1);
+        id systemApertureSceneElement = weakSelf.systemApertureSceneElement;
+        id associatedApplication = ((id (*)(id, SEL))objc_msgSend)(systemApertureSceneElement, sel_registerName("associatedApplication"));
+        NSString *bundleIdentifier = ((id (*)(id, SEL))objc_msgSend)(associatedApplication, sel_registerName("bundleIdentifier"));
+        id activityItem = da::activatedActivityItemFromBundleIdentifier(bundleIdentifier);
         
-//        ((void (*)(id, SEL, id))objc_msgSend)(systemApertureManager, sel_registerName("_removeElementViewController:"), elementViewController);
-//        NSLog(@"%@", ((id (*)(id, SEL, id))objc_msgSend)(systemApertureManager, sel_registerName("elementViewControllerForElement:"), weakSelf.systemApertureSceneElement));
-//        NSLog(@"F");
+        id activitySystemApertureElementObserver = da::defaultActivitySystemApertureElementObserver();
+        ((void (*)(id, SEL, id))objc_msgSend)(activitySystemApertureElementObserver, sel_registerName("activityDidEnd:"), activityItem);
     }];
     
     removeAction.attributes = UIMenuElementAttributesDestructive;

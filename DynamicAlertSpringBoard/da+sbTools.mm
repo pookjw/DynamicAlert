@@ -260,6 +260,11 @@ id da::makeSystemApertureSceneHandleWithItem(id  _Nonnull activityItem) {
     return ((id (*)(id, SEL, id))objc_msgSend)(activitySystemApertureElementObserver, sel_registerName("_createSystemApertureSceneHandleWithItem:"), activityItem);
 }
 
+id da::activatedActivityItemFromBundleIdentifier(NSString * _Nonnull bundleIdentifier) {
+    id activitySystemApertureElementObserver = da::defaultActivitySystemApertureElementObserver();
+    return ((id (*)(id, SEL, id))objc_msgSend)(activitySystemApertureElementObserver, sel_registerName("_activatedElementItemForBundleIdentifier:"), bundleIdentifier);
+}
+
 id da::makeSystemApertureSceneElement(id scene, id systemApertureController, void
 (^readyForPresentationHandler)(id element, BOOL success)) {
     id result = ((id (*)(id, SEL, id, id, id))objc_msgSend)([objc_lookUpClass("SBSystemApertureSceneElement") alloc], sel_registerName("initWithScene:statusBarBackgroundActivitiesSuppresser:readyForPresentationHandler:"), scene, systemApertureController, readyForPresentationHandler);

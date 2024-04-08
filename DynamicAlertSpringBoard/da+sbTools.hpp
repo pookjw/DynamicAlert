@@ -23,6 +23,8 @@ id /* (SAUISystemApertureManager *) */ systemApertureManager();
 
 id /* (SBActivitySystemApertureElementObserver *) */ defaultActivitySystemApertureElementObserver();
 
+id /* (SBActivityItem *) */ activatedActivityItemFromBundleIdentifier(NSString *bundleIdentifier);
+
 id /* (ACActivityDescriptor *) */ makeTestActivityDescriptor();
 
 id /* (ACActivityContent *) */ makeTestActivityContent();
@@ -52,3 +54,8 @@ NSUInteger layoutModeFromElementDescription(id /* (SBSAElementDescription *) */ 
 }
 
 NS_ASSUME_NONNULL_END
+
+/*
+ SAUILayoutModePreference
+ SAUILayoutSpecifyingOverrider
+ */

@@ -33,7 +33,6 @@ extern "C" CGPoint UIRectGetCenter(CGRect);
     
     UIAction *primaryAction = [UIAction actionWithHandler:^(__kindof UIAction * _Nonnull action) {
         id activitySystemApertureElementObserver = da::defaultActivitySystemApertureElementObserver();
-        id systemApertureManager = da::systemApertureManager();
         id activityDescriptor = da::makeTestActivityDescriptor();
         id activityIdentifier = ((id (*)(id, SEL))objc_msgSend)(activityDescriptor, sel_registerName("activityIdentifier"));
         id activityContent = da::makeTestActivityContent();
@@ -46,70 +45,6 @@ extern "C" CGPoint UIRectGetCenter(CGRect);
             id element = da::systemApertureSceneElementFromActivityIdentifier(activityIdentifier);
             
             objc_setAssociatedObject(element, da::getIsDAElementKey(), @YES, OBJC_ASSOCIATION_COPY_NONATOMIC);
-            
-            NSMutableArray<UIView *> *views = [NSMutableArray array];
-            
-            __kindof UIView *sceneView = [objc_lookUpClass("SBSystemApertureSceneElementScenePresenterView") new];
-            [views addObject:sceneView];
-            ((void (*)(id, SEL, id))objc_msgSend)(element, sel_registerName("setSceneView:"), sceneView);
-            [sceneView release];
-            
-            __kindof UIView *leadingView = [objc_lookUpClass("SBSystemApertureSceneElementAccessoryView") new];
-            [views addObject:leadingView];
-            ((void (*)(id, SEL, id))objc_msgSend)(element, sel_registerName("setLeadingView:"), leadingView);
-            [leadingView release];
-            
-            __kindof UIView *trailingView = [objc_lookUpClass("SBSystemApertureSceneElementAccessoryView") new];
-            [views addObject:trailingView];
-            ((void (*)(id, SEL, id))objc_msgSend)(element, sel_registerName("setTrailingView:"), trailingView);
-            [trailingView release];
-            
-            __kindof UIView *minimalView = [objc_lookUpClass("SBSystemApertureSceneElementAccessoryView") new];
-            [views addObject:minimalView];
-            ((void (*)(id, SEL, id))objc_msgSend)(element, sel_registerName("setMinimalView:"), minimalView);
-            [minimalView release];
-            
-            __kindof UIView *detachedMinimalView = [objc_lookUpClass("SBSystemApertureSceneElementAccessoryView") new];
-            [views addObject:detachedMinimalView];
-            ((void (*)(id, SEL, id))objc_msgSend)(element, sel_registerName("setDetachedMinimalView:"), detachedMinimalView);
-            [detachedMinimalView release];
-            
-            [views enumerateObjectsUsingBlock:^(UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                UIView *yellowView = [UIView new];
-                switch (idx) {
-                    case 0:
-                        //                            yellowView.backgroundColor = UIColor.cyanColor;
-                    {
-                        [yellowView release];
-                        yellowView = [[DemoView alloc] initWithFrame:sceneView.bounds systemApertureSceneElement:element];
-                    }
-                        break;
-                    case 1:
-                        yellowView.backgroundColor = UIColor.blueColor;
-                        break;
-                    case 2:
-                        yellowView.backgroundColor = UIColor.greenColor;
-                        break;
-                    case 3:
-                        yellowView.backgroundColor = UIColor.purpleColor;
-                        break;
-                    case 4:
-                        yellowView.backgroundColor = UIColor.systemPinkColor;
-                        break;
-                    default:
-                        break;
-                }
-                
-                yellowView.translatesAutoresizingMaskIntoConstraints = NO;
-                [obj addSubview:yellowView];
-                [NSLayoutConstraint activateConstraints:@[
-                    [yellowView.topAnchor constraintEqualToAnchor:obj.topAnchor],
-                    [yellowView.leadingAnchor constraintEqualToAnchor:obj.leadingAnchor],
-                    [yellowView.trailingAnchor constraintEqualToAnchor:obj.trailingAnchor],
-                    [yellowView.bottomAnchor constraintEqualToAnchor:obj.bottomAnchor],
-                ]];
-                [yellowView release];
-            }];
         });
     }];
     
@@ -238,6 +173,114 @@ static CGPoint custom(id self, SEL _cmd) {
 }
 }
 
+namespace da_SBSystemApertureSceneElement {
+namespace _updatePortalViews {
+static void (*original)(id, SEL);
+static void custom(id self, SEL _cmd) {
+    BOOL flag = ((NSNumber *)objc_getAssociatedObject(self, da::getIsDAElementKey())).boolValue;
+    
+    if (flag) {
+        NSUInteger layoutMode = ((NSUInteger (*)(id, SEL))objc_msgSend)(self, sel_registerName("layoutMode"));
+        
+//        if (layoutMode != 3) {
+//            original(self, _cmd);
+//            return;
+//        }
+        
+        __kindof UIView *leadingView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("leadingView"));
+        ((void (*)(id, SEL, CGSize))objc_msgSend)(leadingView, sel_registerName("setPreferredSize:"), CGSizeMake(40.f, 40.f));
+        __kindof UIView *leadingPortalView = ((id (*)(id, SEL))objc_msgSend)(leadingView, sel_registerName("portalView"));
+        leadingPortalView.hidden = YES;
+        
+        __kindof UIView *trailingView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("trailingView"));
+        ((void (*)(id, SEL, CGSize))objc_msgSend)(trailingView, sel_registerName("setPreferredSize:"), CGSizeMake(40.f, 40.f));
+        __kindof UIView *trailingPortalView = ((id (*)(id, SEL))objc_msgSend)(trailingView, sel_registerName("portalView"));
+        trailingPortalView.hidden = YES;
+        
+        __kindof UIView *minimalView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("minimalView"));
+        ((void (*)(id, SEL, CGSize))objc_msgSend)(minimalView, sel_registerName("setPreferredSize:"), CGSizeMake(40.f, 40.f));
+        __kindof UIView *minimalPortalView = ((id (*)(id, SEL))objc_msgSend)(minimalView, sel_registerName("portalView"));
+        minimalPortalView.hidden = YES;
+        
+        __kindof UIView *detachedMinimalView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("detachedMinimalView"));
+        ((void (*)(id, SEL, CGSize))objc_msgSend)(detachedMinimalView, sel_registerName("setPreferredSize:"), CGSizeMake(40.f, 40.f));
+        __kindof UIView *detachedMinimalPortalView = ((id (*)(id, SEL))objc_msgSend)(detachedMinimalView, sel_registerName("portalView"));
+        detachedMinimalPortalView.hidden = YES;
+    } else {
+        original(self, _cmd);
+    }
+}
+}
+}
+
+namespace da_SAUIElementView {
+namespace initWithElementViewProvider {
+static id (*original)(UIView *, SEL, id);
+static id custom(UIView *self, SEL _cmd, id elementViewProvider) {
+    // SAUIElementViewController -> SAUIElementView
+    
+    self = original(self, _cmd, elementViewProvider);
+    
+    if (self) {
+        if (da::isDAElementFromSystemApertureSceneElement(elementViewProvider)) {
+            UIView *contentView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("contentView"));
+            contentView.backgroundColor = UIColor.systemBrownColor;
+            
+            DemoView *demoView = [[DemoView alloc] initWithFrame:contentView.bounds systemApertureSceneElement:elementViewProvider];
+            
+            demoView.translatesAutoresizingMaskIntoConstraints = NO;
+            [contentView addSubview:demoView];
+            [NSLayoutConstraint activateConstraints:@[
+                [demoView.topAnchor constraintEqualToAnchor:contentView.topAnchor],
+                [demoView.leadingAnchor constraintEqualToAnchor:contentView.leadingAnchor],
+                [demoView.trailingAnchor constraintEqualToAnchor:contentView.trailingAnchor],
+                [demoView.bottomAnchor constraintEqualToAnchor:contentView.bottomAnchor],
+            ]];
+            [demoView release];
+            
+            //
+            
+            __kindof UIView *minimalTransformView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("minimalTransformView"));
+            UIView *minimalProvidedView = ((id (*)(id, SEL))objc_msgSend)(minimalTransformView, sel_registerName("providedView"));
+            minimalProvidedView.backgroundColor = UIColor.systemRedColor;
+            
+            __kindof UIView *leadingTransformView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("leadingTransformView"));
+            UIView *leadingProvidedView = ((id (*)(id, SEL))objc_msgSend)(leadingTransformView, sel_registerName("providedView"));
+            leadingProvidedView.backgroundColor = UIColor.systemRedColor;
+            
+            __kindof UIView *trailingTransformView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("trailingTransformView"));
+            UIView *trailingProvidedView = ((id (*)(id, SEL))objc_msgSend)(trailingTransformView, sel_registerName("providedView"));
+            trailingProvidedView.backgroundColor = UIColor.systemPinkColor;
+        }
+    }
+    
+    return self;
+}
+}
+
+namespace _configureTransformView_ifNecessaryWithProvidedView_assertIfConfigurationRequired {
+static BOOL (*original)(__kindof UIView *, SEL, __kindof UIView **, __kindof UIView *, id);
+static BOOL custom(__kindof UIView *self, SEL _cmd, __kindof UIView **transformView, __kindof UIView *providedView, id assertIfConfigurationRequired) {
+    BOOL result = original(self, _cmd, transformView, providedView, assertIfConfigurationRequired);
+    
+    __kindof UIView *portalView = ((id (*)(id, SEL))objc_msgSend)(providedView, sel_registerName("portalView"));
+    providedView.backgroundColor = UIColor.systemRedColor;
+    
+//    [portalView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//        [obj removeFromSuperview];
+//    }];
+    
+    [(*transformView).subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj removeFromSuperview];
+    }];
+    (*transformView).backgroundColor = UIColor.systemRedColor;
+//    portalView.hidden = YES;
+    
+    return result;
+}
+}
+}
+
 __attribute__((constructor)) static void init() {
     da::hookMessage(UIScene.class, sel_registerName("_sceneForFBSScene:create:withSession:connectionOptions:"), NO, (IMP)(&da_UIScene::_sceneForFBSScene_create_withSession_connectionOptions::custom), (IMP *)(&da_UIScene::_sceneForFBSScene_create_withSession_connectionOptions::original));
     
@@ -250,4 +293,10 @@ __attribute__((constructor)) static void init() {
     da::hookMessage(objc_lookUpClass("SBSAViewDescription"), sel_registerName("bounds"), YES, (IMP)(&da_SBSAViewDescription::bounds::custom), (IMP *)(&da_SBSAViewDescription::bounds::original));
     
     da::hookMessage(objc_lookUpClass("SBSAViewDescription"), sel_registerName("center"), YES, (IMP)(&da_SBSAViewDescription::center::custom), (IMP *)(&da_SBSAViewDescription::center::original));
+    
+    da::hookMessage(objc_lookUpClass("SBSystemApertureSceneElement"), sel_registerName("_updatePortalViews"), YES, (IMP)(&da_SBSystemApertureSceneElement::_updatePortalViews::custom), (IMP *)(&da_SBSystemApertureSceneElement::_updatePortalViews::original));
+    
+    da::hookMessage(objc_lookUpClass("SAUIElementView"), sel_registerName("initWithElementViewProvider:"), YES, (IMP)(&da_SAUIElementView::initWithElementViewProvider::custom), (IMP *)(&da_SAUIElementView::initWithElementViewProvider::original));
+    
+    da::hookMessage(objc_lookUpClass("SAUIElementView"), sel_registerName("_configureTransformView:ifNecessaryWithProvidedView:assertIfConfigurationRequired:"), YES, (IMP)(&da_SAUIElementView::_configureTransformView_ifNecessaryWithProvidedView_assertIfConfigurationRequired::custom), (IMP *)(&da_SAUIElementView::_configureTransformView_ifNecessaryWithProvidedView_assertIfConfigurationRequired::original));
 }
