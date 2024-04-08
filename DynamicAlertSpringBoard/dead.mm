@@ -98,23 +98,23 @@ static void custom(id self, SEL _cmd) {
         
         __kindof UIView *leadingView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("leadingView"));
         ((void (*)(id, SEL, CGSize))objc_msgSend)(leadingView, sel_registerName("setPreferredSize:"), CGSizeMake(40.f, 40.f));
-//        __kindof UIView *leadingPortalView = ((id (*)(id, SEL))objc_msgSend)(leadingView, sel_registerName("portalView"));
-//        leadingPortalView.hidden = YES;
+        //        __kindof UIView *leadingPortalView = ((id (*)(id, SEL))objc_msgSend)(leadingView, sel_registerName("portalView"));
+        //        leadingPortalView.hidden = YES;
         
         __kindof UIView *trailingView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("trailingView"));
         ((void (*)(id, SEL, CGSize))objc_msgSend)(trailingView, sel_registerName("setPreferredSize:"), CGSizeMake(40.f, 40.f));
-//        __kindof UIView *trailingPortalView = ((id (*)(id, SEL))objc_msgSend)(trailingView, sel_registerName("portalView"));
-//        trailingPortalView.hidden = YES;
+        //        __kindof UIView *trailingPortalView = ((id (*)(id, SEL))objc_msgSend)(trailingView, sel_registerName("portalView"));
+        //        trailingPortalView.hidden = YES;
         
         __kindof UIView *minimalView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("minimalView"));
         ((void (*)(id, SEL, CGSize))objc_msgSend)(minimalView, sel_registerName("setPreferredSize:"), CGSizeMake(40.f, 40.f));
-//        __kindof UIView *minimalPortalView = ((id (*)(id, SEL))objc_msgSend)(minimalView, sel_registerName("portalView"));
-//        minimalPortalView.hidden = YES;
+        //        __kindof UIView *minimalPortalView = ((id (*)(id, SEL))objc_msgSend)(minimalView, sel_registerName("portalView"));
+        //        minimalPortalView.hidden = YES;
         
         __kindof UIView *detachedMinimalView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("detachedMinimalView"));
         ((void (*)(id, SEL, CGSize))objc_msgSend)(detachedMinimalView, sel_registerName("setPreferredSize:"), CGSizeMake(40.f, 40.f));
-//        __kindof UIView *detachedMinimalPortalView = ((id (*)(id, SEL))objc_msgSend)(detachedMinimalView, sel_registerName("portalView"));
-//        detachedMinimalPortalView.hidden = YES;
+        //        __kindof UIView *detachedMinimalPortalView = ((id (*)(id, SEL))objc_msgSend)(detachedMinimalView, sel_registerName("portalView"));
+        //        detachedMinimalPortalView.hidden = YES;
     } else {
         original(self, _cmd);
     }
@@ -173,17 +173,17 @@ static CGFloat custom(id self, SEL _cmd) {
 }
 }
 }
-    
+
 //    da::hookMessage(objc_lookUpClass("SAUIElementViewController"), sel_registerName("setCustomContentAlpha:"), YES, (IMP)(&da_SAUIElementViewController::setCustomContentAlpha::custom), (IMP *)(&da_SAUIElementViewController::setCustomContentAlpha::original));
 //    
 //    da::hookMessage(objc_lookUpClass("SAUIElementViewController"), sel_registerName("setCustomContentBlurProgress:"), YES, (IMP)(&da_SAUIElementViewController::setCustomContentBlurProgress::custom), (IMP *)(&da_SAUIElementViewController::setCustomContentBlurProgress::original));
 //    
 //    da::hookMessage(objc_lookUpClass("SAUILayoutSpecifyingElementViewController"), sel_registerName("setSensorObscuringShadowProgress:"), YES, (IMP)(&da_SAUILayoutSpecifyingElementViewController::setSensorObscuringShadowProgress::custom), (IMP *)(&da_SAUILayoutSpecifyingElementViewController::setSensorObscuringShadowProgress::original));
-    
+
 //    da::hookMessage(objc_lookUpClass("SBSystemApertureSceneElement"), sel_registerName("_updatePortalViews"), YES, (IMP)(&da_SBSystemApertureSceneElement::_updatePortalViews::custom), (IMP *)(&da_SBSystemApertureSceneElement::_updatePortalViews::original));
 
 //    da::hookMessage(objc_lookUpClass("SBSystemApertureContainerView"), sel_registerName("setContentClippingEnabled:"), YES, (IMP)(&da_SBSystemApertureContainerView::setContentClippingEnabled::custom), (IMP *)(&da_SBSystemApertureContainerView::setContentClippingEnabled::original));
-    
+
 //    da::hookMessage(objc_lookUpClass("SBSAElementDescription"), sel_registerName("customContentAlpha"), YES, (IMP)(&da_SBSAElementDescription::customContentAlpha::custom), (IMP *)(&da_SBSAElementDescription::customContentAlpha::original));
 //    
 //    da::hookMessage(objc_lookUpClass("SBSAElementDescription"), sel_registerName("customContentBlurProgress"), YES, (IMP)(&da_SBSAElementDescription::customContentBlurProgress::custom), (IMP *)(&da_SBSAElementDescription::customContentBlurProgress::original));
@@ -191,39 +191,193 @@ static CGFloat custom(id self, SEL _cmd) {
 //    da::hookMessage(objc_lookUpClass("SBSAElementDescription"), sel_registerName("sensorObscuringShadowProgress"), YES, (IMP)(&da_SBSAElementDescription::sensorObscuringShadowProgress::custom), (IMP *)(&da_SBSAElementDescription::sensorObscuringShadowProgress::original));
 
 /*
-        FBSSceneClientSettings
-        -[FBSScene updateUIClientSettingsWithBlock:]
+ FBSSceneClientSettings
+ -[FBSScene updateUIClientSettingsWithBlock:]
+ 
+ SBUISA_specifiesPreferredPaddingForCompactLayout
+ SBUISA_preferredPaddingForCompactLayout : (0x31 << 16) + 0x6f0 = 3213040
+ SBUISA_preferredLeadingViewSize : 0x6e0 + (0x31 << 16) = 3213024
+ SBUISA_preferredTrailingViewSize : 0x6e1 + (0x31 << 16) = 3213025
+ SBUISA_customLayoutPreferredOutsetsFromUnsafeArea : 0x6e9 + (0x31 << 16) = 3213033
+ SBUISA_preferredMinimalViewSize : 0x6e2 + (0x31 << 16) = 3213026
+ SBUISA_preferredDetachedMinimalViewSize
+ SBUISA_launchURL
+ SBUISA_launchAction
+ */
+
+((void (*)(id, SEL, id, id))objc_msgSend)(activitySystemApertureElementObserver, sel_registerName("_createAndActivateElementForActivityItem:completion:"), activityItem, ^void(BOOL success) {
+    assert(success);
+    
+    NSArray *registeredElements = ((id (*)(id, SEL))objc_msgSend)(systemApertureManager, sel_registerName("registeredElements"));
+    
+    for (id element in registeredElements) {
+        id /* (FBScene *) */ fbScene = ((id (*)(id, SEL))objc_msgSend)(element, sel_registerName("scene"));
+        //                id /* (FBSSceneClientSettings *) */ clientSettings = ((id (*)(id, SEL))objc_msgSend)(fbScene, sel_registerName("clientSettings"));
+        ((void (*)(id, SEL, id))objc_msgSend)(fbScene, sel_registerName("updateSettingsWithBlock:"), ^(id mutableSettings, Class) {
+            id /* (BSMutableSettings *) */ otherSettings = ((id (*)(id, SEL))objc_msgSend)(mutableSettings, sel_registerName("otherSettings"));
+            // SBUISA_setDirectionalEdgeInsets SBUISA_setCGSize
+            ((void (*)(id, SEL, NSDirectionalEdgeInsets, NSUInteger))objc_msgSend)(otherSettings, sel_registerName("SBUISA_setDirectionalEdgeInsets:forSetting:"), NSDirectionalEdgeInsetsMake(0, 400.f, 400.f, 400.f), 3213033);
+            ((void (*)(id, SEL, CGSize, NSUInteger))objc_msgSend)(otherSettings, sel_registerName("SBUISA_setCGSize:forSetting:"), CGSizeMake(400.f, 400.f), 3213024);
+            ((void (*)(id, SEL, CGSize, NSUInteger))objc_msgSend)(otherSettings, sel_registerName("SBUISA_setCGSize:forSetting:"), CGSizeMake(400.f, 400.f), 3213025);
+            ((void (*)(id, SEL, CGSize, NSUInteger))objc_msgSend)(otherSettings, sel_registerName("SBUISA_setCGSize:forSetting:"), CGSizeMake(400.f, 400.f), 3213026);
+            
+            // SBSystemApertureSceneElementTransitionParameters *
+            ((void (*)(id, SEL, id, id))objc_msgSend)(element, sel_registerName("_updateMutableSceneSettings:withParameters:"), mutableSettings, nil);
+        });
         
-        SBUISA_specifiesPreferredPaddingForCompactLayout
-        SBUISA_preferredPaddingForCompactLayout : (0x31 << 16) + 0x6f0 = 3213040
-        SBUISA_preferredLeadingViewSize : 0x6e0 + (0x31 << 16) = 3213024
-        SBUISA_preferredTrailingViewSize : 0x6e1 + (0x31 << 16) = 3213025
-        SBUISA_customLayoutPreferredOutsetsFromUnsafeArea : 0x6e9 + (0x31 << 16) = 3213033
-        SBUISA_preferredMinimalViewSize : 0x6e2 + (0x31 << 16) = 3213026
-        SBUISA_preferredDetachedMinimalViewSize
-        SBUISA_launchURL
-        SBUISA_launchAction
-        */
-       
-       ((void (*)(id, SEL, id, id))objc_msgSend)(activitySystemApertureElementObserver, sel_registerName("_createAndActivateElementForActivityItem:completion:"), activityItem, ^void(BOOL success) {
-           assert(success);
-           
-           NSArray *registeredElements = ((id (*)(id, SEL))objc_msgSend)(systemApertureManager, sel_registerName("registeredElements"));
-           
-           for (id element in registeredElements) {
-               id /* (FBScene *) */ fbScene = ((id (*)(id, SEL))objc_msgSend)(element, sel_registerName("scene"));
-//                id /* (FBSSceneClientSettings *) */ clientSettings = ((id (*)(id, SEL))objc_msgSend)(fbScene, sel_registerName("clientSettings"));
-               ((void (*)(id, SEL, id))objc_msgSend)(fbScene, sel_registerName("updateSettingsWithBlock:"), ^(id mutableSettings, Class) {
-                   id /* (BSMutableSettings *) */ otherSettings = ((id (*)(id, SEL))objc_msgSend)(mutableSettings, sel_registerName("otherSettings"));
-                   // SBUISA_setDirectionalEdgeInsets SBUISA_setCGSize
-                   ((void (*)(id, SEL, NSDirectionalEdgeInsets, NSUInteger))objc_msgSend)(otherSettings, sel_registerName("SBUISA_setDirectionalEdgeInsets:forSetting:"), NSDirectionalEdgeInsetsMake(0, 400.f, 400.f, 400.f), 3213033);
-                   ((void (*)(id, SEL, CGSize, NSUInteger))objc_msgSend)(otherSettings, sel_registerName("SBUISA_setCGSize:forSetting:"), CGSizeMake(400.f, 400.f), 3213024);
-                   ((void (*)(id, SEL, CGSize, NSUInteger))objc_msgSend)(otherSettings, sel_registerName("SBUISA_setCGSize:forSetting:"), CGSizeMake(400.f, 400.f), 3213025);
-                   ((void (*)(id, SEL, CGSize, NSUInteger))objc_msgSend)(otherSettings, sel_registerName("SBUISA_setCGSize:forSetting:"), CGSizeMake(400.f, 400.f), 3213026);
-                   
-                   // SBSystemApertureSceneElementTransitionParameters *
-                   ((void (*)(id, SEL, id, id))objc_msgSend)(element, sel_registerName("_updateMutableSceneSettings:withParameters:"), mutableSettings, nil);
-               });
-               
-               id clientSettings = ((id (*)(id, SEL))objc_msgSend)(fbScene, sel_registerName("clientSettings"));
-               id otherSettings = ((id (*)(id, SEL))objc_msgSend)(clientSettings, sel_registerName("otherSettings"));
+        id clientSettings = ((id (*)(id, SEL))objc_msgSend)(fbScene, sel_registerName("clientSettings"));
+        id otherSettings = ((id (*)(id, SEL))objc_msgSend)(clientSettings, sel_registerName("otherSettings"));
+    }
+}
+}
+
+namespace da_SBSystemApertureSceneElement {
+    
+namespace _configureTransformView_ifNecessaryWithProvidedView_assertIfConfigurationRequired {
+static BOOL (*original)(__kindof UIView *, SEL, __kindof UIView **, __kindof UIView *, id);
+static BOOL custom(__kindof UIView *self, SEL _cmd, __kindof UIView **transformView, __kindof UIView *providedView, id assertIfConfigurationRequired) {
+    BOOL result = original(self, _cmd, transformView, providedView, assertIfConfigurationRequired);
+    
+    __kindof UIView *portalView = ((id (*)(id, SEL))objc_msgSend)(providedView, sel_registerName("portalView"));
+    providedView.backgroundColor = UIColor.systemRedColor;
+    
+//    [portalView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//        [obj removeFromSuperview];
+//    }];
+    
+    [(*transformView).subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//        [obj removeFromSuperview];
+        obj.backgroundColor = UIColor.systemRedColor;
+    }];
+    (*transformView).backgroundColor = UIColor.systemRedColor;
+//    portalView.hidden = YES;
+    
+    
+    
+    
+//    __kindof UIView *minimalTransformView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("minimalTransformView"));
+//    CGRect minimalTransformViewFrame = minimalTransformView.frame;
+//    minimalTransformViewFrame.size = CGSizeMake(40.f, 40.f);
+//    minimalTransformView.frame = minimalTransformViewFrame;
+    
+    return result;
+}
+}
+
+namespace layoutSubviews {
+static void (*original)(__kindof UIView *, SEL);
+static void custom(__kindof UIView *self, SEL _cmd) {
+    original(self, _cmd);
+    
+    __kindof UIView *leadingTransformView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("leadingTransformView"));
+    CGRect leadingTransformViewFrame = leadingTransformView.frame;
+    leadingTransformViewFrame.size = CGSizeMake(40.f, 40.f);
+    leadingTransformView.frame = leadingTransformViewFrame;
+    leadingTransformView.alpha = 1.f;
+    leadingTransformView.clipsToBounds = NO;
+    
+    __kindof UIView *trailingTransformView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("trailingTransformView"));
+    CGRect trailingTransformViewFrame = trailingTransformView.frame;
+    trailingTransformViewFrame.size = CGSizeMake(40.f, 40.f);
+    trailingTransformView.frame = trailingTransformViewFrame;
+    trailingTransformView.alpha = 1.f;
+    trailingTransformView.clipsToBounds = NO;
+}
+}
+
+namespace suggestedOutsetsForLayoutMode_maximumOutsets {
+static NSDirectionalEdgeInsets (*original)(__kindof UIView *, SEL, NSUInteger, NSDirectionalEdgeInsets);
+static NSDirectionalEdgeInsets custom(__kindof UIView *self, SEL _cmd, NSUInteger layoutMode, NSDirectionalEdgeInsets maximumOutsets) {
+    NSDirectionalEdgeInsets result = original(self, _cmd, layoutMode, maximumOutsets);
+    NSLog(@"Foo %@", NSStringFromDirectionalEdgeInsets(result));
+    return NSDirectionalEdgeInsetsMake(0.f, -15.333f, 0.f, -41.f);
+//    return result;
+}
+}
+}
+
+
+namespace da_SAUIProvidedViewContainerView {
+namespace layoutSubviews {
+static void (*original)(__kindof UIView *, SEL);
+static void custom(__kindof UIView *self, SEL _cmd) {
+    original(self, _cmd);
+    
+//    [UIView performWithoutAnimation:^{
+//        CGRect frame = self.frame;
+//        frame.size = CGSizeMake(40.f, 40.f);
+//        self.frame = frame;
+//        
+//    }];
+//    
+//    objc_super superInfo = { self, [self class] };
+//    reinterpret_cast<void (*)(objc_super *, SEL)>(objc_msgSendSuper2)(&superInfo, _cmd);
+    
+}
+}
+}
+
+namespace da_SAUIElementViewController {
+
+namespace maximumSizeOfLeadingViewForElementView {
+static CGSize (*original)(__kindof UIViewController *, SEL, __kindof UIView *);
+static CGSize custom(__kindof UIViewController *self, SEL _cmd, __kindof UIView *elementView) {
+    return CGSizeMake(40.f, 40.f);
+}
+}
+
+namespace maximumSizeOfMinimalViewForElementView {
+static CGSize (*original)(__kindof UIViewController *, SEL, __kindof UIView *);
+static CGSize custom(__kindof UIViewController *self, SEL _cmd, __kindof UIView *elementView) {
+    return CGSizeMake(40.f, 40.f);
+}
+}
+
+namespace maximumSizeOfTrailingViewForElementView {
+static CGSize (*original)(__kindof UIViewController *, SEL, __kindof UIView *);
+static CGSize custom(__kindof UIViewController *self, SEL _cmd, __kindof UIView *elementView) {
+    return CGSizeMake(40.f, 40.f);
+}
+}
+
+}
+
+namespace da_SBSystemApertureSceneElement {
+namespace _updatePortalViews {
+static void (*original)(id, SEL);
+static void custom(id self, SEL _cmd) {
+    BOOL flag = ((NSNumber *)objc_getAssociatedObject(self, da::getIsDAElementKey())).boolValue;
+    
+    if (flag) {
+        NSUInteger layoutMode = ((NSUInteger (*)(id, SEL))objc_msgSend)(self, sel_registerName("layoutMode"));
+        
+//        if (layoutMode != 3) {
+//            original(self, _cmd);
+//            return;
+//        }
+        
+        __kindof UIView *leadingView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("leadingView"));
+        ((void (*)(id, SEL, CGSize))objc_msgSend)(leadingView, sel_registerName("setPreferredSize:"), CGSizeMake(40.f, 40.f));
+        __kindof UIView *leadingPortalView = ((id (*)(id, SEL))objc_msgSend)(leadingView, sel_registerName("portalView"));
+        leadingPortalView.hidden = YES;
+        
+        __kindof UIView *trailingView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("trailingView"));
+        ((void (*)(id, SEL, CGSize))objc_msgSend)(trailingView, sel_registerName("setPreferredSize:"), CGSizeMake(40.f, 40.f));
+        __kindof UIView *trailingPortalView = ((id (*)(id, SEL))objc_msgSend)(trailingView, sel_registerName("portalView"));
+        trailingPortalView.hidden = YES;
+        
+        __kindof UIView *minimalView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("minimalView"));
+        ((void (*)(id, SEL, CGSize))objc_msgSend)(minimalView, sel_registerName("setPreferredSize:"), CGSizeMake(40.f, 40.f));
+        __kindof UIView *minimalPortalView = ((id (*)(id, SEL))objc_msgSend)(minimalView, sel_registerName("portalView"));
+        minimalPortalView.hidden = YES;
+        
+        __kindof UIView *detachedMinimalView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("detachedMinimalView"));
+        ((void (*)(id, SEL, CGSize))objc_msgSend)(detachedMinimalView, sel_registerName("setPreferredSize:"), CGSizeMake(40.f, 40.f));
+        __kindof UIView *detachedMinimalPortalView = ((id (*)(id, SEL))objc_msgSend)(detachedMinimalView, sel_registerName("portalView"));
+        detachedMinimalPortalView.hidden = YES;
+    } else {
+        original(self, _cmd);
+    }
+}
+}
+}
