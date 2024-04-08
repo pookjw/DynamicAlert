@@ -13,6 +13,7 @@
 #import <objc/message.h>
 
 extern "C" CGPoint UIRectGetCenter(CGRect);
+OBJC_EXPORT id objc_msgSendSuper2(void);
 
 @interface ButtonViewController : UIViewController
 @end
@@ -271,14 +272,100 @@ static BOOL custom(__kindof UIView *self, SEL _cmd, __kindof UIView **transformV
 //    }];
     
     [(*transformView).subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [obj removeFromSuperview];
+//        [obj removeFromSuperview];
+        obj.backgroundColor = UIColor.systemRedColor;
     }];
     (*transformView).backgroundColor = UIColor.systemRedColor;
 //    portalView.hidden = YES;
     
+    
+    
+    
+//    __kindof UIView *minimalTransformView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("minimalTransformView"));
+//    CGRect minimalTransformViewFrame = minimalTransformView.frame;
+//    minimalTransformViewFrame.size = CGSizeMake(40.f, 40.f);
+//    minimalTransformView.frame = minimalTransformViewFrame;
+    
     return result;
 }
 }
+
+namespace layoutSubviews {
+static void (*original)(__kindof UIView *, SEL);
+static void custom(__kindof UIView *self, SEL _cmd) {
+    original(self, _cmd);
+    
+    __kindof UIView *leadingTransformView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("leadingTransformView"));
+    CGRect leadingTransformViewFrame = leadingTransformView.frame;
+    leadingTransformViewFrame.size = CGSizeMake(40.f, 40.f);
+    leadingTransformView.frame = leadingTransformViewFrame;
+    leadingTransformView.alpha = 1.f;
+    leadingTransformView.clipsToBounds = NO;
+    
+    __kindof UIView *trailingTransformView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("trailingTransformView"));
+    CGRect trailingTransformViewFrame = trailingTransformView.frame;
+    trailingTransformViewFrame.size = CGSizeMake(40.f, 40.f);
+    trailingTransformView.frame = trailingTransformViewFrame;
+    trailingTransformView.alpha = 1.f;
+    trailingTransformView.clipsToBounds = NO;
+}
+}
+
+namespace suggestedOutsetsForLayoutMode_maximumOutsets {
+static NSDirectionalEdgeInsets (*original)(__kindof UIView *, SEL, NSUInteger, NSDirectionalEdgeInsets);
+static NSDirectionalEdgeInsets custom(__kindof UIView *self, SEL _cmd, NSUInteger layoutMode, NSDirectionalEdgeInsets maximumOutsets) {
+    NSDirectionalEdgeInsets result = original(self, _cmd, layoutMode, maximumOutsets);
+    NSLog(@"Foo %@", NSStringFromDirectionalEdgeInsets(result));
+    return NSDirectionalEdgeInsetsMake(0.f, -15.333f, 0.f, -41.f);
+//    return result;
+}
+}
+
+}
+
+namespace da_SAUIProvidedViewContainerView {
+namespace layoutSubviews {
+static void (*original)(__kindof UIView *, SEL);
+static void custom(__kindof UIView *self, SEL _cmd) {
+    original(self, _cmd);
+    
+//    [UIView performWithoutAnimation:^{
+//        CGRect frame = self.frame;
+//        frame.size = CGSizeMake(40.f, 40.f);
+//        self.frame = frame;
+//        
+//    }];
+//    
+//    objc_super superInfo = { self, [self class] };
+//    reinterpret_cast<void (*)(objc_super *, SEL)>(objc_msgSendSuper2)(&superInfo, _cmd);
+    
+}
+}
+}
+
+namespace da_SAUIElementViewController {
+
+namespace maximumSizeOfLeadingViewForElementView {
+static CGSize (*original)(__kindof UIViewController *, SEL, __kindof UIView *);
+static CGSize custom(__kindof UIViewController *self, SEL _cmd, __kindof UIView *elementView) {
+    return CGSizeMake(40.f, 40.f);
+}
+}
+
+namespace maximumSizeOfMinimalViewForElementView {
+static CGSize (*original)(__kindof UIViewController *, SEL, __kindof UIView *);
+static CGSize custom(__kindof UIViewController *self, SEL _cmd, __kindof UIView *elementView) {
+    return CGSizeMake(40.f, 40.f);
+}
+}
+
+namespace maximumSizeOfTrailingViewForElementView {
+static CGSize (*original)(__kindof UIViewController *, SEL, __kindof UIView *);
+static CGSize custom(__kindof UIViewController *self, SEL _cmd, __kindof UIView *elementView) {
+    return CGSizeMake(40.f, 40.f);
+}
+}
+
 }
 
 __attribute__((constructor)) static void init() {
@@ -299,4 +386,16 @@ __attribute__((constructor)) static void init() {
     da::hookMessage(objc_lookUpClass("SAUIElementView"), sel_registerName("initWithElementViewProvider:"), YES, (IMP)(&da_SAUIElementView::initWithElementViewProvider::custom), (IMP *)(&da_SAUIElementView::initWithElementViewProvider::original));
     
     da::hookMessage(objc_lookUpClass("SAUIElementView"), sel_registerName("_configureTransformView:ifNecessaryWithProvidedView:assertIfConfigurationRequired:"), YES, (IMP)(&da_SAUIElementView::_configureTransformView_ifNecessaryWithProvidedView_assertIfConfigurationRequired::custom), (IMP *)(&da_SAUIElementView::_configureTransformView_ifNecessaryWithProvidedView_assertIfConfigurationRequired::original));
+    
+//    da::hookMessage(objc_lookUpClass("SAUIElementView"), @selector(layoutSubviews), YES, (IMP)(&da_SAUIElementView::layoutSubviews::custom), (IMP *)(&da_SAUIElementView::layoutSubviews::original));
+    
+    da::hookMessage(objc_lookUpClass("SAUIElementView"), sel_registerName("suggestedOutsetsForLayoutMode:maximumOutsets:"), YES, (IMP)(&da_SAUIElementView::suggestedOutsetsForLayoutMode_maximumOutsets::custom), (IMP *)(&da_SAUIElementView::suggestedOutsetsForLayoutMode_maximumOutsets::original));
+    
+//    da::hookMessage(objc_lookUpClass("_SAUIProvidedViewContainerView"), @selector(layoutSubviews), YES, (IMP)(&da_SAUIProvidedViewContainerView::layoutSubviews::custom), (IMP *)(&da_SAUIProvidedViewContainerView::layoutSubviews::original));
+//    
+//    da::hookMessage(objc_lookUpClass("SAUIElementViewController"), sel_registerName("maximumSizeOfLeadingViewForElementView:"), YES, (IMP)(&da_SAUIElementViewController::maximumSizeOfLeadingViewForElementView::custom), (IMP *)(&da_SAUIElementViewController::maximumSizeOfLeadingViewForElementView::original));
+//    
+//    da::hookMessage(objc_lookUpClass("SAUIElementViewController"), sel_registerName("maximumSizeOfMinimalViewForElementView:"), YES, (IMP)(&da_SAUIElementViewController::maximumSizeOfMinimalViewForElementView::custom), (IMP *)(&da_SAUIElementViewController::maximumSizeOfMinimalViewForElementView::original));
+//    
+//    da::hookMessage(objc_lookUpClass("SAUIElementViewController"), sel_registerName("maximumSizeOfTrailingViewForElementView:"), YES, (IMP)(&da_SAUIElementViewController::maximumSizeOfTrailingViewForElementView::custom), (IMP *)(&da_SAUIElementViewController::maximumSizeOfTrailingViewForElementView::original));
 }
