@@ -14,6 +14,21 @@ void *da::getIsDAElementKey() {
     return key;
 }
 
+void *da::getAlertTitleKey() {
+    static void *key = &key;
+    return key;
+}
+
+void *da::getAlertMessageKey() {
+    static void *key = &key;
+    return key;
+}
+
+void *da::getAlertActionsKey() {
+    static void *key = &key;
+    return key;
+}
+
 id da::context() {
     id systemApertureViewController = da::systemApertureViewController();
     id childViewControllers;
@@ -314,6 +329,35 @@ id da::systemApertureSceneElementFromElementDescription(id elementDescription) {
     }
     
     return nil;
+}
+
+void da::makeSystemApertureSceneElement(void (^completionHandler)(id element)) {
+    id activitySystemApertureElementObserver = da::defaultActivitySystemApertureElementObserver();
+    id activityDescriptor = da::makeTestActivityDescriptor();
+    id activityIdentifier = ((id (*)(id, SEL))objc_msgSend)(activityDescriptor, sel_registerName("activityIdentifier"));
+    id activityContent = da::makeTestActivityContent();
+    id activityContentUpdate = da::makeTestActivityContentUpdate(activityDescriptor, activityContent);
+    id activityItem = da::makeTestActivityItem(activityContentUpdate);
+    
+    ((void (*)(id, SEL, id, id))objc_msgSend)(activitySystemApertureElementObserver, sel_registerName("_createAndActivateElementForActivityItem:completion:"), activityItem, ^void(BOOL success) {
+        assert(success);
+        
+        id element = da::systemApertureSceneElementFromActivityIdentifier(activityIdentifier);
+        
+        objc_setAssociatedObject(element, da::getIsDAElementKey(), @YES, OBJC_ASSOCIATION_COPY_NONATOMIC);
+        
+        completionHandler(element);
+    });
+}
+
+void da::makeAlertElement(NSString *title, NSString * _Nullable message, NSArray<UIAction *> *actions, void (^completionHandler)(id element)) {
+    da::makeSystemApertureSceneElement(^(id element) {
+        objc_setAssociatedObject(element, da::getAlertTitleKey(), title, OBJC_ASSOCIATION_COPY_NONATOMIC);
+        objc_setAssociatedObject(element, da::getAlertMessageKey(), message, OBJC_ASSOCIATION_COPY_NONATOMIC);
+        objc_setAssociatedObject(element, da::getAlertActionsKey(), actions, OBJC_ASSOCIATION_COPY_NONATOMIC);
+        
+        completionHandler(element);
+    });
 }
 
 BOOL da::isDAElementFromElementDescription(id elementDescription) {

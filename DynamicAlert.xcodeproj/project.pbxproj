@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F0869152BC50D8600D20DA1 /* DASceneHandleObserver.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4F0869142BC50D8600D20DA1 /* DASceneHandleObserver.mm */; };
+		4F0869162BC50D8600D20DA1 /* DASceneHandleObserver.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4F0869132BC50D8600D20DA1 /* DASceneHandleObserver.hpp */; };
+		4F08693B2BC556F700D20DA1 /* DAAlertView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4F08693A2BC556F700D20DA1 /* DAAlertView.mm */; };
+		4F08693C2BC556F700D20DA1 /* DAAlertView.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4F0869392BC556F700D20DA1 /* DAAlertView.hpp */; };
 		4F5708372BBDAEBF000037D4 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FBC0B522BBC5A410064F1A6 /* AVFoundation.framework */; };
 		4F625BB92BB8124F0029C995 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4F625BB82BB8124F0029C995 /* main.mm */; };
 		4F625BBE2BB81B710029C995 /* da+hook.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4F625BBD2BB81B710029C995 /* da+hook.hpp */; };
@@ -21,6 +25,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4F0869132BC50D8600D20DA1 /* DASceneHandleObserver.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DASceneHandleObserver.hpp; sourceTree = "<group>"; };
+		4F0869142BC50D8600D20DA1 /* DASceneHandleObserver.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DASceneHandleObserver.mm; sourceTree = "<group>"; };
+		4F0869392BC556F700D20DA1 /* DAAlertView.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DAAlertView.hpp; sourceTree = "<group>"; };
+		4F08693A2BC556F700D20DA1 /* DAAlertView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DAAlertView.mm; sourceTree = "<group>"; };
 		4F5708382BBDB814000037D4 /* dead.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = dead.mm; sourceTree = "<group>"; };
 		4F625BB12BB811E00029C995 /* DynamicAlertSpringBoard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DynamicAlertSpringBoard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F625BB82BB8124F0029C995 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
@@ -78,6 +86,10 @@
 				4F5708382BBDB814000037D4 /* dead.mm */,
 				4FADC42B2BBEFF2400F87607 /* DemoView.hpp */,
 				4FADC42C2BBEFF2400F87607 /* DemoView.mm */,
+				4F0869392BC556F700D20DA1 /* DAAlertView.hpp */,
+				4F08693A2BC556F700D20DA1 /* DAAlertView.mm */,
+				4F0869132BC50D8600D20DA1 /* DASceneHandleObserver.hpp */,
+				4F0869142BC50D8600D20DA1 /* DASceneHandleObserver.mm */,
 			);
 			path = DynamicAlertSpringBoard;
 			sourceTree = "<group>";
@@ -109,7 +121,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F0869162BC50D8600D20DA1 /* DASceneHandleObserver.hpp in Headers */,
 				4FADC42E2BBEFF2400F87607 /* DemoView.hpp in Headers */,
+				4F08693C2BC556F700D20DA1 /* DAAlertView.hpp in Headers */,
 				4FBC0AF62BB967D30064F1A6 /* da+sbTools.hpp in Headers */,
 				4F625BBE2BB81B710029C995 /* da+hook.hpp in Headers */,
 			);
@@ -209,6 +223,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4FBC0AF72BB967D30064F1A6 /* da+sbTools.mm in Sources */,
+				4F0869152BC50D8600D20DA1 /* DASceneHandleObserver.mm in Sources */,
+				4F08693B2BC556F700D20DA1 /* DAAlertView.mm in Sources */,
 				4FADC42D2BBEFF2400F87607 /* DemoView.mm in Sources */,
 				4F625BB92BB8124F0029C995 /* main.mm in Sources */,
 				4F625BBF2BB81B710029C995 /* da+hook.mm in Sources */,

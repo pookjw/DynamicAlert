@@ -8,9 +8,11 @@
 #import <UIKit/UIKit.h>
 #import "da+hook.hpp"
 #import "da+sbTools.hpp"
-#import "DemoView.hpp"
+//#import "DemoView.hpp"
+#import "DAAlertView.hpp"
 #import <objc/runtime.h>
 #import <objc/message.h>
+#import "DASceneHandleObserver.hpp"
 
 extern "C" CGPoint UIRectGetCenter(CGRect);
 OBJC_EXPORT id objc_msgSendSuper2(void);
@@ -33,20 +35,7 @@ OBJC_EXPORT id objc_msgSendSuper2(void);
     buttonConfiguration.title = @"Foo";
     
     UIAction *primaryAction = [UIAction actionWithHandler:^(__kindof UIAction * _Nonnull action) {
-        id activitySystemApertureElementObserver = da::defaultActivitySystemApertureElementObserver();
-        id activityDescriptor = da::makeTestActivityDescriptor();
-        id activityIdentifier = ((id (*)(id, SEL))objc_msgSend)(activityDescriptor, sel_registerName("activityIdentifier"));
-        id activityContent = da::makeTestActivityContent();
-        id activityContentUpdate = da::makeTestActivityContentUpdate(activityDescriptor, activityContent);
-        id activityItem = da::makeTestActivityItem(activityContentUpdate);
         
-        ((void (*)(id, SEL, id, id))objc_msgSend)(activitySystemApertureElementObserver, sel_registerName("_createAndActivateElementForActivityItem:completion:"), activityItem, ^void(BOOL success) {
-            assert(success);
-            
-            id element = da::systemApertureSceneElementFromActivityIdentifier(activityIdentifier);
-            
-            objc_setAssociatedObject(element, da::getIsDAElementKey(), @YES, OBJC_ASSOCIATION_COPY_NONATOMIC);
-        });
     }];
     
     UIButton *button = [UIButton buttonWithConfiguration:buttonConfiguration primaryAction:primaryAction];
@@ -186,9 +175,8 @@ static id custom(UIView *self, SEL _cmd, id elementViewProvider) {
     if (self) {
         if (da::isDAElementFromSystemApertureSceneElement(elementViewProvider)) {
             UIView *contentView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("contentView"));
-            contentView.backgroundColor = UIColor.systemBrownColor;
             
-            DemoView *demoView = [[DemoView alloc] initWithFrame:contentView.bounds systemApertureSceneElement:elementViewProvider];
+            DAAlertView *demoView = [[DAAlertView alloc] initWithFrame:contentView.bounds systemApertureSceneElement:elementViewProvider];
             
             demoView.translatesAutoresizingMaskIntoConstraints = NO;
             [contentView addSubview:demoView];
@@ -222,6 +210,17 @@ static id custom(UIView *self, SEL _cmd, id elementViewProvider) {
 
 }
 
+namespace da_SBSceneHandle {
+namespace _commonInit {
+static void (*original)(id, SEL);
+static void custom(id self, SEL _cmd) {
+    original(self, _cmd);
+    
+    ((void (*)(id, SEL, id))objc_msgSend)(self, sel_registerName("addObserver:"), DASceneHandleObserver.sharedInstance);
+}
+}
+}
+
 __attribute__((constructor)) static void init() {
     da::hookMessage(UIScene.class, sel_registerName("_sceneForFBSScene:create:withSession:connectionOptions:"), NO, (IMP)(&da_UIScene::_sceneForFBSScene_create_withSession_connectionOptions::custom), (IMP *)(&da_UIScene::_sceneForFBSScene_create_withSession_connectionOptions::original));
     
@@ -236,4 +235,6 @@ __attribute__((constructor)) static void init() {
     da::hookMessage(objc_lookUpClass("SBSAViewDescription"), sel_registerName("center"), YES, (IMP)(&da_SBSAViewDescription::center::custom), (IMP *)(&da_SBSAViewDescription::center::original));
     
     da::hookMessage(objc_lookUpClass("SAUIElementView"), sel_registerName("initWithElementViewProvider:"), YES, (IMP)(&da_SAUIElementView::initWithElementViewProvider::custom), (IMP *)(&da_SAUIElementView::initWithElementViewProvider::original));
+    
+    da::hookMessage(objc_lookUpClass("SBSceneHandle"), sel_registerName("_commonInit"), YES, (IMP)(&da_SBSceneHandle::_commonInit::custom), (IMP *)(&da_SBSceneHandle::_commonInit::original));
 }

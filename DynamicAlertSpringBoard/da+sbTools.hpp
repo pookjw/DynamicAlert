@@ -12,6 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 namespace da {
 
 void *getIsDAElementKey();
+void *getAlertTitleKey();
+void *getAlertMessageKey();
+void *getAlertActionsKey();
 
 id /* (SBSAContext *) */ context();
 
@@ -43,6 +46,10 @@ id _Nullable /* (SBSystemApertureSceneElement *) */ systemApertureSceneElementFr
 
 id _Nullable /* (SBSystemApertureSceneElement *) */ systemApertureSceneElementFromElementDescription(id /* (SBSAElementDescription *) */ elementDescription);
 
+void makeSystemApertureSceneElement(void (^completionHandler)(id /* (SBSystemApertureSceneElement *) */element));
+
+void makeAlertElement(NSString *title, NSString * _Nullable message, NSArray<UIAction *> *actions, void (^completionHandler)(id /* (SBSystemApertureSceneElement *) */element));
+
 BOOL isDAElementFromElementDescription(id /* (SBSAElementDescription *) */ elementDescription);
 
 id _Nullable /* (SBSystemApertureSceneElement *) */ systemApertureSceneElementFromContainerViewDescription(id /* (SBSAContainerViewDescription *) */ containerViewDescription);
@@ -50,6 +57,8 @@ id _Nullable /* (SBSystemApertureSceneElement *) */ systemApertureSceneElementFr
 BOOL isDAElementFromContainerViewDescription(id /* (SBSAContainerViewDescription *) */ containerViewDescription);
 
 NSUInteger layoutModeFromElementDescription(id /* (SBSAElementDescription *) */ elementDescription);
+
+
 
 }
 

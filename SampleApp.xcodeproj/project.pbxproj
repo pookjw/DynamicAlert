@@ -15,6 +15,7 @@
 		4F0868E22BC4643100D20DA1 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 4F0868E12BC4643100D20DA1 /* Base */; };
 		4F0868E52BC4643100D20DA1 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4F0868E42BC4643100D20DA1 /* main.mm */; };
 		4F0868ED2BC464CD00D20DA1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F0868EC2BC464CD00D20DA1 /* UIKit.framework */; };
+		4F08693F2BC5A93900D20DA1 /* DASceneObserver.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4F08693E2BC5A93900D20DA1 /* DASceneObserver.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,8 @@
 		4F0868E32BC4643100D20DA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F0868E42BC4643100D20DA1 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		4F0868EC2BC464CD00D20DA1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		4F08693D2BC5A93900D20DA1 /* DASceneObserver.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DASceneObserver.hpp; sourceTree = "<group>"; };
+		4F08693E2BC5A93900D20DA1 /* DASceneObserver.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DASceneObserver.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +79,8 @@
 				4F0868E02BC4643100D20DA1 /* LaunchScreen.storyboard */,
 				4F0868E32BC4643100D20DA1 /* Info.plist */,
 				4F0868E42BC4643100D20DA1 /* main.mm */,
+				4F08693D2BC5A93900D20DA1 /* DASceneObserver.hpp */,
+				4F08693E2BC5A93900D20DA1 /* DASceneObserver.mm */,
 			);
 			path = SampleApp;
 			sourceTree = "<group>";
@@ -161,6 +166,7 @@
 				4F0868DA2BC4643000D20DA1 /* ViewController.mm in Sources */,
 				4F0868D42BC4643000D20DA1 /* AppDelegate.mm in Sources */,
 				4F0868E52BC4643100D20DA1 /* main.mm in Sources */,
+				4F08693F2BC5A93900D20DA1 /* DASceneObserver.mm in Sources */,
 				4F0868D72BC4643000D20DA1 /* SceneDelegate.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
