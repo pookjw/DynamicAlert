@@ -16,22 +16,44 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2gz-g5-zPa">
-                                <rect key="frame" x="159" y="408.66666666666669" width="75" height="35"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
-                                <connections>
-                                    <action selector="buttonDidTrigger:" destination="BYZ-38-t0r" eventType="touchUpInside" id="9za-6h-i6e"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="82v-es-qvW">
+                                <rect key="frame" x="131" y="381.66666666666669" width="131.33333333333337" height="89"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pending" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hnu-PL-goa">
+                                        <rect key="frame" x="34.333333333333343" y="0.0" width="62.333333333333343" height="20.333333333333332"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3gf-dI-JwQ">
+                                        <rect key="frame" x="4" y="20.333333333333318" width="123" height="34.333333333333343"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Original Alert"/>
+                                        <connections>
+                                            <action selector="originalAlertButtonDidTrigger:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Z87-Tc-f1p"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Esb-25-Le3">
+                                        <rect key="frame" x="0.0" y="54.666666666666629" width="131.33333333333334" height="34.333333333333343"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Aperture Alert"/>
+                                        <connections>
+                                            <action selector="apertureAlertButtonDidTrigger:" destination="BYZ-38-t0r" eventType="touchUpInside" id="EGq-qU-iPW"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="2gz-g5-zPa" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="QkC-ey-mKV"/>
-                            <constraint firstItem="2gz-g5-zPa" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="aqK-MF-1lh"/>
+                            <constraint firstItem="82v-es-qvW" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="0xj-2d-5Vk"/>
+                            <constraint firstItem="82v-es-qvW" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Har-2O-dGx"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="statusLabel" destination="Hnu-PL-goa" id="dZ3-ww-473"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

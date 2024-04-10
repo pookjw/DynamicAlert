@@ -6,64 +6,47 @@
 //
 
 #import "ViewController.hpp"
-#import <objc/message.h>
+#import "UIAlertController+Category.hpp"
 #import <objc/runtime.h>
-#import "DASceneObserver.hpp"
-
-#define KEY 0x123456
 
 @interface ViewController ()
+@property (retain, nonatomic) IBOutlet UILabel *statusLabel;
 @end
 
 @implementation ViewController
 
-- (instancetype)initWithCoder:(NSCoder *)coder {
-    if (self = [super initWithCoder:coder]) {
-        [NSNotificationCenter.defaultCenter addObserver:self
-                                               selector:@selector(alertButtonDidTrigger:)
-                                                   name:DASceneObserverDidTriggerActionNotification 
-                                                 object:nil];
-    }
-    
-    return self;
+- (void)dealloc {
+    [_statusLabel release];
+    [super dealloc];
 }
 
-- (IBAction)buttonDidTrigger:(UIButton *)sender {
-    UIWindowScene *windowScene = self.view.window.windowScene;
-    id fbsScene = ((id (*)(id, SEL))objc_msgSend)(windowScene, sel_registerName("_scene"));
-    
-    ((void (*)(id, SEL, id))objc_msgSend)(fbsScene, sel_registerName("updateUIClientSettingsWithBlock:"), ^(id /* (UIMutableApplicationSceneClientSettings *) */ mutableSettings, Class resultClass) {
-        id mutableOtherSettings = ((id (*)(id, SEL))objc_msgSend)(mutableSettings, sel_registerName("otherSettings"));
-        
-        NSMutableArray *alertInfo = [((id (*)(id, SEL, NSUInteger))objc_msgSend)(mutableOtherSettings, sel_registerName("objectForSetting:"), 0x123456) mutableCopy];
-        
-        if (alertInfo == nil) {
-            alertInfo = [NSMutableArray new];
-        }
-        
-        [alertInfo addObject:@{
-            @"title": @"Hello World!",
-            @"message": @"Can you hear me?",
-            @"actions": @[
-                @{
-                    @"identifier": @"CANCEL",
-                    @"title": @"Cancel"
-                },
-                @{
-                    @"identifier": @"OK",
-                    @"title": @"OK"
-                }
-            ]
-        }];
-        
-        ((void (*)(id, SEL, id, NSUInteger))objc_msgSend)(mutableOtherSettings, sel_registerName("setObject:forSetting:"), alertInfo, 0x123456);
-        
-        [alertInfo release];
-    });
+- (IBAction)originalAlertButtonDidTrigger:(UIButton *)sender {
+    [self presentAlertWithApertureUI:NO];
 }
 
-- (void)alertButtonDidTrigger:(NSNotification *)notification {
-    NSLog(@"%@", notification.userInfo);
+- (IBAction)apertureAlertButtonDidTrigger:(UIButton *)sender {
+    [self presentAlertWithApertureUI:YES];
+}
+
+- (void)presentAlertWithApertureUI:(BOOL)apertureUI __attribute__((objc_direct)) {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Hello World!" message:@"Can you hear me?" preferredStyle:UIAlertControllerStyleAlert];
+    
+    objc_setAssociatedObject(alertController, UIAlertController.apertureUIKey, @(apertureUI), OBJC_ASSOCIATION_COPY_NONATOMIC);
+    
+    UILabel *statusLabel = self.statusLabel;
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        statusLabel.text = @"Cancel";
+    }];
+    
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        statusLabel.text = @"OK";
+    }];
+    
+    [alertController addAction:cancelAction];
+    [alertController addAction:okAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 @end

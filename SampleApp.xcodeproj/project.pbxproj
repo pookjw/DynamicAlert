@@ -15,7 +15,9 @@
 		4F0868E22BC4643100D20DA1 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 4F0868E12BC4643100D20DA1 /* Base */; };
 		4F0868E52BC4643100D20DA1 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4F0868E42BC4643100D20DA1 /* main.mm */; };
 		4F0868ED2BC464CD00D20DA1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F0868EC2BC464CD00D20DA1 /* UIKit.framework */; };
-		4F08693F2BC5A93900D20DA1 /* DASceneObserver.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4F08693E2BC5A93900D20DA1 /* DASceneObserver.mm */; };
+		4F0869432BC6AA5100D20DA1 /* da+hook.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4F0869412BC6AA5100D20DA1 /* da+hook.mm */; };
+		4F0869462BC6AA7A00D20DA1 /* UIAlertController+Category.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4F0869452BC6AA7A00D20DA1 /* UIAlertController+Category.mm */; };
+		4F0869492BC6C9D200D20DA1 /* DAAlertControllerView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4F0869482BC6C9D200D20DA1 /* DAAlertControllerView.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,8 +34,12 @@
 		4F0868E32BC4643100D20DA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F0868E42BC4643100D20DA1 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		4F0868EC2BC464CD00D20DA1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		4F08693D2BC5A93900D20DA1 /* DASceneObserver.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DASceneObserver.hpp; sourceTree = "<group>"; };
-		4F08693E2BC5A93900D20DA1 /* DASceneObserver.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DASceneObserver.mm; sourceTree = "<group>"; };
+		4F0869402BC6AA5100D20DA1 /* da+hook.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = "da+hook.hpp"; sourceTree = "<group>"; };
+		4F0869412BC6AA5100D20DA1 /* da+hook.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "da+hook.mm"; sourceTree = "<group>"; };
+		4F0869442BC6AA7A00D20DA1 /* UIAlertController+Category.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "UIAlertController+Category.hpp"; sourceTree = "<group>"; };
+		4F0869452BC6AA7A00D20DA1 /* UIAlertController+Category.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "UIAlertController+Category.mm"; sourceTree = "<group>"; };
+		4F0869472BC6C9D200D20DA1 /* DAAlertControllerView.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DAAlertControllerView.hpp; sourceTree = "<group>"; };
+		4F0869482BC6C9D200D20DA1 /* DAAlertControllerView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DAAlertControllerView.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +57,7 @@
 		4F0868C62BC4643000D20DA1 = {
 			isa = PBXGroup;
 			children = (
+				4F0869422BC6AA5100D20DA1 /* Shared */,
 				4F0868D12BC4643000D20DA1 /* SampleApp */,
 				4F0868D02BC4643000D20DA1 /* Products */,
 				4F0868EB2BC464CD00D20DA1 /* Frameworks */,
@@ -74,13 +81,15 @@
 				4F0868D62BC4643000D20DA1 /* SceneDelegate.mm */,
 				4F0868D82BC4643000D20DA1 /* ViewController.hpp */,
 				4F0868D92BC4643000D20DA1 /* ViewController.mm */,
+				4F0869442BC6AA7A00D20DA1 /* UIAlertController+Category.hpp */,
+				4F0869452BC6AA7A00D20DA1 /* UIAlertController+Category.mm */,
 				4F0868DB2BC4643000D20DA1 /* Main.storyboard */,
 				4F0868DE2BC4643100D20DA1 /* Assets.xcassets */,
 				4F0868E02BC4643100D20DA1 /* LaunchScreen.storyboard */,
 				4F0868E32BC4643100D20DA1 /* Info.plist */,
 				4F0868E42BC4643100D20DA1 /* main.mm */,
-				4F08693D2BC5A93900D20DA1 /* DASceneObserver.hpp */,
-				4F08693E2BC5A93900D20DA1 /* DASceneObserver.mm */,
+				4F0869472BC6C9D200D20DA1 /* DAAlertControllerView.hpp */,
+				4F0869482BC6C9D200D20DA1 /* DAAlertControllerView.mm */,
 			);
 			path = SampleApp;
 			sourceTree = "<group>";
@@ -91,6 +100,15 @@
 				4F0868EC2BC464CD00D20DA1 /* UIKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4F0869422BC6AA5100D20DA1 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				4F0869402BC6AA5100D20DA1 /* da+hook.hpp */,
+				4F0869412BC6AA5100D20DA1 /* da+hook.mm */,
+			);
+			path = Shared;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -166,8 +184,10 @@
 				4F0868DA2BC4643000D20DA1 /* ViewController.mm in Sources */,
 				4F0868D42BC4643000D20DA1 /* AppDelegate.mm in Sources */,
 				4F0868E52BC4643100D20DA1 /* main.mm in Sources */,
-				4F08693F2BC5A93900D20DA1 /* DASceneObserver.mm in Sources */,
+				4F0869432BC6AA5100D20DA1 /* da+hook.mm in Sources */,
 				4F0868D72BC4643000D20DA1 /* SceneDelegate.mm in Sources */,
+				4F0869492BC6C9D200D20DA1 /* DAAlertControllerView.mm in Sources */,
+				4F0869462BC6AA7A00D20DA1 /* UIAlertController+Category.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

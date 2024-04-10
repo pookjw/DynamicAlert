@@ -45,13 +45,15 @@
             id otherSettings = ((id (*)(id, SEL))objc_msgSend)(clientSettings, sel_registerName("otherSettings"));
             
             NSArray *alertInfo = ((id (*)(id, SEL, NSUInteger))objc_msgSend)(otherSettings, sel_registerName("objectForSetting:"), 0x123456);
+            if (alertInfo.count == 0) return;
 
-            NSDictionary *first = alertInfo.firstObject;
+            NSDictionary *first = alertInfo[0];
             
             NSString *title = first[@"title"];
             NSString *message = first[@"message"];
             NSArray<NSDictionary *> *actionsInfo = first[@"actions"];
             
+            __block id systemApertureSceneElement;
             NSMutableArray<UIAction *> *actions = [NSMutableArray new];
             for (NSDictionary *actionInfo in actionsInfo) {
                 NSString *title = actionInfo[@"title"];
@@ -62,13 +64,20 @@
                         id mutableOtherSettings = ((id (*)(id, SEL))objc_msgSend)(mutableSettings, sel_registerName("otherSettings"));
                         ((void (*)(id, SEL, id, NSUInteger))objc_msgSend)(mutableOtherSettings, sel_registerName("setObject:forSetting:"), identifier, 0x234567);
                     });
+                    
+                    id associatedApplication = ((id (*)(id, SEL))objc_msgSend)(systemApertureSceneElement, sel_registerName("associatedApplication"));
+                    NSString *bundleIdentifier = ((id (*)(id, SEL))objc_msgSend)(associatedApplication, sel_registerName("bundleIdentifier"));
+                    id activityItem = da::activatedActivityItemFromBundleIdentifier(bundleIdentifier);
+                    
+                    id activitySystemApertureElementObserver = da::defaultActivitySystemApertureElementObserver();
+                    ((void (*)(id, SEL, id))objc_msgSend)(activitySystemApertureElementObserver, sel_registerName("activityDidEnd:"), activityItem);
                 }];
                 
                 [actions addObject:action];
             }
             
             da::makeAlertElement(title, message, actions, ^(id  _Nonnull element) {
-                
+                systemApertureSceneElement = element;
             });
             
             [actions release];

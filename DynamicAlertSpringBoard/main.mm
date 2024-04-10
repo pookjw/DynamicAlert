@@ -163,7 +163,6 @@ static CGPoint custom(id self, SEL _cmd) {
 }
 }
 
-
 namespace da_SAUIElementView {
 namespace initWithElementViewProvider {
 static id (*original)(UIView *, SEL, id);
@@ -207,7 +206,6 @@ static id custom(UIView *self, SEL _cmd, id elementViewProvider) {
     return self;
 }
 }
-
 }
 
 namespace da_SBSceneHandle {
@@ -217,6 +215,20 @@ static void custom(id self, SEL _cmd) {
     original(self, _cmd);
     
     ((void (*)(id, SEL, id))objc_msgSend)(self, sel_registerName("addObserver:"), DASceneHandleObserver.sharedInstance);
+}
+}
+}
+
+namespace da_SAUILayoutSpecifyingElementViewController {
+namespace viewDidLoad {
+static void (*original)(id, SEL);
+static void custom(id self, SEL _cmd) {
+    original(self, _cmd);
+    
+    id elementViewProvider = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("elementViewProvider"));
+    
+    id layoutSpecifyingOverrider = ((id (*)(id, SEL))objc_msgSend)(elementViewProvider, sel_registerName("systemApertureLayoutSpecifyingOverrider"));
+    ((void (*)(id, SEL, NSUInteger, NSUInteger))objc_msgSend)(layoutSpecifyingOverrider, sel_registerName("setLayoutMode:reason:"), 3, 3);
 }
 }
 }
@@ -237,4 +249,6 @@ __attribute__((constructor)) static void init() {
     da::hookMessage(objc_lookUpClass("SAUIElementView"), sel_registerName("initWithElementViewProvider:"), YES, (IMP)(&da_SAUIElementView::initWithElementViewProvider::custom), (IMP *)(&da_SAUIElementView::initWithElementViewProvider::original));
     
     da::hookMessage(objc_lookUpClass("SBSceneHandle"), sel_registerName("_commonInit"), YES, (IMP)(&da_SBSceneHandle::_commonInit::custom), (IMP *)(&da_SBSceneHandle::_commonInit::original));
+    
+    da::hookMessage(objc_lookUpClass("SAUILayoutSpecifyingElementViewController"), @selector(viewDidLoad), YES, (IMP)(&da_SAUILayoutSpecifyingElementViewController::viewDidLoad::custom), (IMP *)(&da_SAUILayoutSpecifyingElementViewController::viewDidLoad::original));
 }
