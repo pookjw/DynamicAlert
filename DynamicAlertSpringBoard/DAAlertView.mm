@@ -95,6 +95,7 @@ __attribute__((objc_direct_members))
     
     UILabel *titleLabel = [UILabel new];
     titleLabel.textColor = UIColor.whiteColor;
+    titleLabel.numberOfLines = 0;
     
     _titleLabel = [titleLabel retain];
     return [titleLabel autorelease];
@@ -105,6 +106,7 @@ __attribute__((objc_direct_members))
     
     UILabel *messageLabel = [UILabel new];
     messageLabel.textColor = UIColor.whiteColor;
+    messageLabel.numberOfLines = 0;
     
     _messageLabel = [messageLabel retain];
     return [messageLabel autorelease];
