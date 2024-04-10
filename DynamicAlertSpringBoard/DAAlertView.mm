@@ -12,7 +12,8 @@
 
 __attribute__((objc_direct_members))
 @interface DAAlertView ()
-@property (retain, readonly, nonatomic) UIStackView *stackView;
+@property (retain, readonly, nonatomic) UIStackView *rootStackView;
+@property (retain, readonly, nonatomic) UIStackView *actionsStackView;
 @property (retain, readonly, nonatomic) UILabel *titleLabel;
 @property (retain, readonly, nonatomic) UILabel *messageLabel;
 @property (weak, nonatomic) id systemApertureSceneElement;
@@ -20,28 +21,32 @@ __attribute__((objc_direct_members))
 
 @implementation DAAlertView
 
-@synthesize stackView = _stackView;
+@synthesize rootStackView = _rootStackView;
+@synthesize actionsStackView = _actionsStackView;
 @synthesize titleLabel = _titleLabel;
 @synthesize messageLabel = _messageLabel;
 
 - (instancetype)initWithFrame:(CGRect)frame systemApertureSceneElement:(id)systemApertureSceneElement {
     if (self = [super initWithFrame:frame]) {
-        UIStackView *labelStackView = self.stackView;
+        UIStackView *labelStackView = self.rootStackView;
+        UIStackView *actionsStackView = self.actionsStackView;
         
         NSArray<UIAction *> *actions = objc_getAssociatedObject(systemApertureSceneElement, da::getAlertActionsKey());
+        UIButtonConfiguration *buttonConfiguration = [UIButtonConfiguration tintedButtonConfiguration];
         
         for (UIAction *action in actions) {
-            UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem primaryAction:action];
-            [labelStackView addArrangedSubview:button];
+            UIButton *button = [UIButton buttonWithConfiguration:buttonConfiguration primaryAction:action];
+            [actionsStackView addArrangedSubview:button];
         }
         
         labelStackView.translatesAutoresizingMaskIntoConstraints = NO;
         [self addSubview:labelStackView];
         [NSLayoutConstraint activateConstraints:@[
-            [labelStackView.topAnchor constraintEqualToAnchor:self.topAnchor],
-            [labelStackView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
-            [labelStackView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
-            [labelStackView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor]
+            [labelStackView.topAnchor constraintEqualToAnchor:self.layoutMarginsGuide.topAnchor],
+            [labelStackView.leadingAnchor constraintEqualToAnchor:self.layoutMarginsGuide.leadingAnchor],
+            [labelStackView.trailingAnchor constraintEqualToAnchor:self.layoutMarginsGuide.trailingAnchor],
+            [labelStackView.bottomAnchor constraintEqualToAnchor:self.layoutMarginsGuide.bottomAnchor],
+            [actionsStackView.widthAnchor constraintEqualToAnchor:self.layoutMarginsGuide.widthAnchor]
         ]];
         
         self.titleLabel.text = objc_getAssociatedObject(systemApertureSceneElement, da::getAlertTitleKey());
@@ -52,23 +57,37 @@ __attribute__((objc_direct_members))
 }
 
 - (void)dealloc {
-    [_stackView release];
+    [_rootStackView release];
+    [_actionsStackView release];
     [_titleLabel release];
     [_messageLabel release];
     [super dealloc];
 }
 
-- (UIStackView *)stackView {
-    if (auto stackView = _stackView) return stackView;
+- (UIStackView *)rootStackView {
+    if (auto rootStackView = _rootStackView) return rootStackView;
     
-    UIStackView *stackView = [[UIStackView alloc] initWithArrangedSubviews:@[self.titleLabel, self.messageLabel]];
-    stackView.axis = UILayoutConstraintAxisVertical;
-    stackView.alignment = UIStackViewAlignmentLeading;
-    stackView.distribution = UIStackViewDistributionFillProportionally;
-    stackView.spacing = 8.f;
+    UIStackView *rootStackView = [[UIStackView alloc] initWithArrangedSubviews:@[self.titleLabel, self.messageLabel, self.actionsStackView]];
+    rootStackView.axis = UILayoutConstraintAxisVertical;
+    rootStackView.alignment = UIStackViewAlignmentLeading;
+    rootStackView.distribution = UIStackViewDistributionFillProportionally;
+    rootStackView.spacing = 8.f;
     
-    _stackView = [stackView retain];
-    return [stackView autorelease];
+    _rootStackView = [rootStackView retain];
+    return [rootStackView autorelease];
+}
+
+- (UIStackView *)actionsStackView {
+    if (auto actionsStackView = _actionsStackView) return actionsStackView;
+    
+    UIStackView *actionsStackView = [UIStackView new];
+    actionsStackView.axis = UILayoutConstraintAxisHorizontal;
+    actionsStackView.alignment = UIStackViewAlignmentCenter;
+    actionsStackView.distribution = UIStackViewDistributionFill;
+    actionsStackView.spacing = 8.f;
+    
+    _actionsStackView = [actionsStackView retain];
+    return [actionsStackView autorelease];
 }
 
 - (UILabel *)titleLabel {

@@ -29,7 +29,7 @@
 }
 
 - (void)presentAlertWithApertureUI:(BOOL)apertureUI __attribute__((objc_direct)) {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Hello World!" message:@"Can you hear me?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Hello World!" message:@"🥲😖🙂" preferredStyle:UIAlertControllerStyleAlert];
     
     objc_setAssociatedObject(alertController, UIAlertController.apertureUIKey, @(apertureUI), OBJC_ASSOCIATION_COPY_NONATOMIC);
     

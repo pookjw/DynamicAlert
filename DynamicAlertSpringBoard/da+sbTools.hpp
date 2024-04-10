@@ -15,12 +15,15 @@ void *getIsDAElementKey();
 void *getAlertTitleKey();
 void *getAlertMessageKey();
 void *getAlertActionsKey();
+void *getDAAlertViewKey();
 
 id /* (SBSAContext *) */ context();
 
 id /* (SBSystemApertureController *) */ systemApertureControllerForMainDisplay();
 
 __kindof UIViewController * /* (SBSystemApertureViewController *) */ systemApertureViewController();
+
+__kindof UIViewController * /* (SAUIElementViewController *) */ elementViewControllerFromElement(id /* (SBSystemApertureSceneElement *) */ element);
 
 id /* (SAUISystemApertureManager *) */ systemApertureManager();
 
@@ -58,7 +61,7 @@ BOOL isDAElementFromContainerViewDescription(id /* (SBSAContainerViewDescription
 
 NSUInteger layoutModeFromElementDescription(id /* (SBSAElementDescription *) */ elementDescription);
 
-
+CGSize preferredContentSize(id /* (SBSAContainerViewDescription *) */ containerViewDescription, CGFloat width);
 
 }
 

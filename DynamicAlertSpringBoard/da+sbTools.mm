@@ -6,6 +6,7 @@
 //
 
 #import "da+sbTools.hpp"
+#import "DAAlertView.hpp"
 #import <objc/runtime.h>
 #import <objc/message.h>
 
@@ -25,6 +26,11 @@ void *da::getAlertMessageKey() {
 }
 
 void *da::getAlertActionsKey() {
+    static void *key = &key;
+    return key;
+}
+
+void *da::getDAAlertViewKey() {
     static void *key = &key;
     return key;
 }
@@ -50,6 +56,11 @@ __kindof UIViewController * da::systemApertureViewController() {
     object_getInstanceVariable(systemApertureController, "_systemApertureViewController", (void **)&systemApertureViewController);
     
     return systemApertureViewController;
+}
+
+__kindof UIViewController *da::elementViewControllerFromElement(id element) {
+    id systemApertureManager = da::systemApertureManager();
+    return ((id (*)(id, SEL, id))objc_msgSend)(systemApertureManager, sel_registerName("elementViewControllerForElement:"), element);
 }
 
 id da::systemApertureManager() {
@@ -403,4 +414,14 @@ NSUInteger da::layoutModeFromElementDescription(id  _Nonnull elementDescription)
     NSUInteger layoutMode = ((NSUInteger (*)(id, SEL))objc_msgSend)(element, sel_registerName("layoutMode"));
     
     return layoutMode;
+}
+
+CGSize da::preferredContentSize(id  _Nonnull containerViewDescription, CGFloat width) {
+    id element = da::systemApertureSceneElementFromContainerViewDescription(containerViewDescription);
+    id elementViewController = da::elementViewControllerFromElement(element);
+    id _elementView = ((id (*)(id, SEL))objc_msgSend)(elementViewController, sel_registerName("_elementView"));
+    
+    DAAlertView *alertView = objc_getAssociatedObject(_elementView, da::getDAAlertViewKey());
+    
+    return [alertView systemLayoutSizeFittingSize:CGSizeMake(width, CGFLOAT_MAX) withHorizontalFittingPriority:UILayoutPriorityRequired verticalFittingPriority:UILayoutPriorityFittingSizeLevel];
 }

@@ -72,21 +72,18 @@ static id custom(Class cls, SEL _cmd, id fbScene, BOOL create, id session, id co
 }
 
 namespace da_SBSystemApertureSceneElement {
-
-namespace _sizeForSceneView {
-static CGSize (*original)(id, SEL);
-static CGSize custom(id self, SEL _cmd) {
-    BOOL flag = ((NSNumber *)objc_getAssociatedObject(self, da::getIsDAElementKey())).boolValue;
-    
-    if (flag) {
-        return CGSizeMake(400.f, 300.f);
+namespace _shouldHandleLaunchAction {
+static BOOL (*original)(id, SEL);
+static BOOL custom(id self, SEL _cmd) {
+    if (da::isDAElementFromSystemApertureSceneElement(self)) {
+        return NO;
     } else {
         return original(self, _cmd);
     }
 }
 }
-}
 
+}
 
 
 namespace da_SBSAContainerViewDescription {
@@ -97,7 +94,8 @@ static CGRect custom(id self, SEL _cmd) {
         return original(self, _cmd);
     }
     
-    return CGRectMake(0.f, 0.f, 400.f, 300.f);
+    CGSize contentSize = da::preferredContentSize(self, 400.f);
+    return CGRectMake(0.f, 0.f, contentSize.width, contentSize.height);
 }
 }
 
@@ -108,7 +106,8 @@ static CGPoint custom(id self, SEL _cmd) {
         return original(self, _cmd);
     }
     
-    return CGPointMake(200.f, 150.f);
+    CGSize contentSize = da::preferredContentSize(self, 400.f);
+    return CGPointMake(contentSize.width * 0.5f, contentSize.height * 0.5f);
 }
 }
 }
@@ -132,7 +131,8 @@ static CGRect custom(id self, SEL _cmd) {
         return original(self, _cmd);
     }
     
-    return CGRectMake(0.f, 0.f, 400.f, 300.f);
+    CGSize contentSize = da::preferredContentSize(self, 400.f);
+    return CGRectMake(0.f, 0.f, contentSize.width, contentSize.height);
 }
 }
 
@@ -157,8 +157,9 @@ static CGPoint custom(id self, SEL _cmd) {
     id context = da::context();
     CGRect inertContainerFrame = ((CGRect (*)(id, SEL))objc_msgSend)(context, sel_registerName("inertContainerFrame"));
     CGPoint center = UIRectGetCenter(inertContainerFrame);
+    CGSize contentSize = da::preferredContentSize(self, 400.f);
     
-    return CGPointMake(center.x, center.y - CGRectGetHeight(inertContainerFrame) * 0.5f + 150.f);
+    return CGPointMake(center.x, center.y - CGRectGetHeight(inertContainerFrame) * 0.5f + contentSize.height * 0.5f);
 }
 }
 }
@@ -176,6 +177,7 @@ static id custom(UIView *self, SEL _cmd, id elementViewProvider) {
             UIView *contentView = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("contentView"));
             
             DAAlertView *demoView = [[DAAlertView alloc] initWithFrame:contentView.bounds systemApertureSceneElement:elementViewProvider];
+            objc_setAssociatedObject(self, da::getDAAlertViewKey(), demoView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
             
             demoView.translatesAutoresizingMaskIntoConstraints = NO;
             [contentView addSubview:demoView];
@@ -233,10 +235,25 @@ static void custom(id self, SEL _cmd) {
 }
 }
 
+namespace da_SBSystemApertureViewController {
+namespace  _collapseExpandedElementIfPossible {
+static BOOL (*original)(id, SEL);
+static BOOL custom(id self, SEL _cmd) {
+    id _currentFirstElement = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("_currentFirstElement"));
+    
+    if (da::isDAElementFromSystemApertureSceneElement(_currentFirstElement)) {
+        return NO;
+    } else {
+        return original(self, _cmd);
+    }
+}
+}
+}
+
 __attribute__((constructor)) static void init() {
     da::hookMessage(UIScene.class, sel_registerName("_sceneForFBSScene:create:withSession:connectionOptions:"), NO, (IMP)(&da_UIScene::_sceneForFBSScene_create_withSession_connectionOptions::custom), (IMP *)(&da_UIScene::_sceneForFBSScene_create_withSession_connectionOptions::original));
     
-    da::hookMessage(objc_lookUpClass("SBSystemApertureSceneElement"), sel_registerName("_sizeForSceneView"), YES, (IMP)(&da_SBSystemApertureSceneElement::_sizeForSceneView::custom), (IMP *)(&da_SBSystemApertureSceneElement::_sizeForSceneView::original));
+    da::hookMessage(objc_lookUpClass("SBSystemApertureSceneElement"), sel_registerName("_shouldHandleLaunchAction"), YES, (IMP)(&da_SBSystemApertureSceneElement::_shouldHandleLaunchAction::custom), (IMP *)(&da_SBSystemApertureSceneElement::_shouldHandleLaunchAction::original));
     
     da::hookMessage(objc_lookUpClass("SBSAContainerViewDescription"), sel_registerName("contentBounds"), YES, (IMP)(&da_SBSAContainerViewDescription::contentBounds::custom), (IMP *)(&da_SBSAContainerViewDescription::contentBounds::original));
     
@@ -251,4 +268,6 @@ __attribute__((constructor)) static void init() {
     da::hookMessage(objc_lookUpClass("SBSceneHandle"), sel_registerName("_commonInit"), YES, (IMP)(&da_SBSceneHandle::_commonInit::custom), (IMP *)(&da_SBSceneHandle::_commonInit::original));
     
     da::hookMessage(objc_lookUpClass("SAUILayoutSpecifyingElementViewController"), @selector(viewDidLoad), YES, (IMP)(&da_SAUILayoutSpecifyingElementViewController::viewDidLoad::custom), (IMP *)(&da_SAUILayoutSpecifyingElementViewController::viewDidLoad::original));
+    
+    da::hookMessage(objc_lookUpClass("SBSystemApertureViewController"), sel_registerName("_collapseExpandedElementIfPossible"), YES, (IMP)(&da_SBSystemApertureViewController::_collapseExpandedElementIfPossible::custom), (IMP *)(&da_SBSystemApertureViewController::_collapseExpandedElementIfPossible::original));
 }

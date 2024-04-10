@@ -77,6 +77,7 @@
             }
             
             da::makeAlertElement(title, message, actions, ^(id  _Nonnull element) {
+                ((void (*)(id, SEL, BOOL))objc_msgSend)(element, sel_registerName("setUrgent:"), YES);
                 systemApertureSceneElement = element;
             });
             
