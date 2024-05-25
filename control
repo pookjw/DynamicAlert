@@ -1,6 +1,6 @@
 Package: com.pookjw.dynamicalerttweak
 Name: DynamicAlertTweak
-Version: 1.0
+Version: 1.0.1
 Architecture: iphoneos-arm64
 Description: An awesome MobileSubstrate tweak!
 Maintainer: pookjw
