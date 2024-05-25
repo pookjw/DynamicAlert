@@ -90,7 +90,7 @@ id da::defaultActivitySystemApertureElementObserver() {
 id da::makeTestActivityDescriptor() {
     NSString *identifier = [NSUUID UUID].UUIDString;
     
-    NSString *target = @"com.apple.Preferences";
+    NSString *target = @"com.apple.DemoApp";
     
     id /* (ACActivityPresentationDestination *) */ destination_0 = ((id (*)(id, SEL, NSUInteger))objc_msgSend)([objc_lookUpClass("ACActivityPresentationDestination") alloc], sel_registerName("initWithDestination:"), 0);
     id /* (ACActivityPresentationDestination *) */ destination_1 = ((id (*)(id, SEL, NSUInteger))objc_msgSend)([objc_lookUpClass("ACActivityPresentationDestination") alloc], sel_registerName("initWithDestination:"), 1);
@@ -126,7 +126,7 @@ id da::makeTestActivityDescriptor() {
         @"platterTarget": @{
             @"widget": @{
                 @"containingProcess": @{
-                    @"bundleIdentifier": @"com.apple.Preferences",
+                    @"bundleIdentifier": @"com.apple.DemoApp",
                     @"canBypassActivityCountLimits": @NO,
                     @"canContributeToAllActivities": @NO,
                     @"canEndAllActivities": @NO,
@@ -265,7 +265,7 @@ id da::makeTestActivityContent() {
 }
 
 id da::makeTestActivityContentUpdate(id  _Nonnull descriptor, id  _Nonnull content) {
-    NSString *identifier = @"com.apple.Preferences";
+    NSString *identifier = @"com.apple.DemoApp";
     
     // 아마 SpringBoard가 재시작 됐을 때를 말하는 것 같음
     NSUInteger state = 2;
