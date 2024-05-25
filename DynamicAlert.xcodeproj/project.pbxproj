@@ -12,11 +12,11 @@
 		4F08693B2BC556F700D20DA1 /* DAAlertView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4F08693A2BC556F700D20DA1 /* DAAlertView.mm */; };
 		4F08693C2BC556F700D20DA1 /* DAAlertView.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4F0869392BC556F700D20DA1 /* DAAlertView.hpp */; };
 		4F625BB92BB8124F0029C995 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4F625BB82BB8124F0029C995 /* main.mm */; };
-		4F625BBE2BB81B710029C995 /* da+hook.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4F625BBD2BB81B710029C995 /* da+hook.hpp */; };
-		4F625BBF2BB81B710029C995 /* da+hook.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4F625BBC2BB81B710029C995 /* da+hook.mm */; };
 		4F625BC22BB81C8B0029C995 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F625BC12BB81C8B0029C995 /* UIKit.framework */; };
-		4FBC0AF62BB967D30064F1A6 /* da+sbTools.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4FBC0AF52BB967D30064F1A6 /* da+sbTools.hpp */; };
-		4FBC0AF72BB967D30064F1A6 /* da+sbTools.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4FBC0AF42BB967D30064F1A6 /* da+sbTools.mm */; };
+		4F8FF5A02C01B325008164CD /* da+sbTools.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4F8FF59E2C01B325008164CD /* da+sbTools.hpp */; };
+		4F8FF5A12C01B325008164CD /* da+sbTools.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4F8FF59F2C01B325008164CD /* da+sbTools.mm */; };
+		4F8FF5A52C01B345008164CD /* da+hook.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4F8FF5A32C01B344008164CD /* da+hook.mm */; };
+		4F8FF5A62C01B345008164CD /* da+hook.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 4F8FF5A42C01B345008164CD /* da+hook.hpp */; };
 		4FBC0AF92BBB06270064F1A6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FBC0AF82BBB06270064F1A6 /* QuartzCore.framework */; };
 		4FBC0AFB2BBB063E0064F1A6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FBC0AFA2BBB063E0064F1A6 /* CoreGraphics.framework */; };
 /* End PBXBuildFile section */
@@ -26,14 +26,14 @@
 		4F0869142BC50D8600D20DA1 /* DASceneHandleObserver.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DASceneHandleObserver.mm; sourceTree = "<group>"; };
 		4F0869392BC556F700D20DA1 /* DAAlertView.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DAAlertView.hpp; sourceTree = "<group>"; };
 		4F08693A2BC556F700D20DA1 /* DAAlertView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DAAlertView.mm; sourceTree = "<group>"; };
-		4F5708382BBDB814000037D4 /* dead.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = dead.mm; sourceTree = "<group>"; };
 		4F625BB12BB811E00029C995 /* DynamicAlertSpringBoard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DynamicAlertSpringBoard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F625BB82BB8124F0029C995 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
-		4F625BBC2BB81B710029C995 /* da+hook.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "da+hook.mm"; sourceTree = "<group>"; };
-		4F625BBD2BB81B710029C995 /* da+hook.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "da+hook.hpp"; sourceTree = "<group>"; };
 		4F625BC12BB81C8B0029C995 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.4.sdk/System/iOSSupport/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		4FBC0AF42BB967D30064F1A6 /* da+sbTools.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "da+sbTools.mm"; sourceTree = "<group>"; };
-		4FBC0AF52BB967D30064F1A6 /* da+sbTools.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = "da+sbTools.hpp"; sourceTree = "<group>"; };
+		4F8FF59E2C01B325008164CD /* da+sbTools.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = "da+sbTools.hpp"; sourceTree = "<group>"; };
+		4F8FF59F2C01B325008164CD /* da+sbTools.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "da+sbTools.mm"; sourceTree = "<group>"; };
+		4F8FF5A22C01B32A008164CD /* dead._mm */ = {isa = PBXFileReference; lastKnownFileType = text; path = dead._mm; sourceTree = "<group>"; };
+		4F8FF5A32C01B344008164CD /* da+hook.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "da+hook.mm"; sourceTree = "<group>"; };
+		4F8FF5A42C01B345008164CD /* da+hook.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = "da+hook.hpp"; sourceTree = "<group>"; };
 		4FBC0AF82BBB06270064F1A6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.4.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		4FBC0AFA2BBB063E0064F1A6 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.4.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		4FBC0B522BBC5A410064F1A6 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.4.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -56,7 +56,6 @@
 		4F625B872BB811B50029C995 = {
 			isa = PBXGroup;
 			children = (
-				4F625BBB2BB81B4C0029C995 /* Shared */,
 				4F625BB22BB811E00029C995 /* DynamicAlertSpringBoard */,
 				4F625B912BB811B50029C995 /* Products */,
 				4F625BC02BB81C8B0029C995 /* Frameworks */,
@@ -74,25 +73,18 @@
 		4F625BB22BB811E00029C995 /* DynamicAlertSpringBoard */ = {
 			isa = PBXGroup;
 			children = (
+				4F8FF5A42C01B345008164CD /* da+hook.hpp */,
+				4F8FF5A32C01B344008164CD /* da+hook.mm */,
+				4F8FF59E2C01B325008164CD /* da+sbTools.hpp */,
+				4F8FF59F2C01B325008164CD /* da+sbTools.mm */,
 				4F625BB82BB8124F0029C995 /* main.mm */,
-				4FBC0AF52BB967D30064F1A6 /* da+sbTools.hpp */,
-				4FBC0AF42BB967D30064F1A6 /* da+sbTools.mm */,
-				4F5708382BBDB814000037D4 /* dead.mm */,
 				4F0869392BC556F700D20DA1 /* DAAlertView.hpp */,
 				4F08693A2BC556F700D20DA1 /* DAAlertView.mm */,
 				4F0869132BC50D8600D20DA1 /* DASceneHandleObserver.hpp */,
 				4F0869142BC50D8600D20DA1 /* DASceneHandleObserver.mm */,
+				4F8FF5A22C01B32A008164CD /* dead._mm */,
 			);
 			path = DynamicAlertSpringBoard;
-			sourceTree = "<group>";
-		};
-		4F625BBB2BB81B4C0029C995 /* Shared */ = {
-			isa = PBXGroup;
-			children = (
-				4F625BBD2BB81B710029C995 /* da+hook.hpp */,
-				4F625BBC2BB81B710029C995 /* da+hook.mm */,
-			);
-			path = Shared;
 			sourceTree = "<group>";
 		};
 		4F625BC02BB81C8B0029C995 /* Frameworks */ = {
@@ -115,8 +107,8 @@
 			files = (
 				4F0869162BC50D8600D20DA1 /* DASceneHandleObserver.hpp in Headers */,
 				4F08693C2BC556F700D20DA1 /* DAAlertView.hpp in Headers */,
-				4FBC0AF62BB967D30064F1A6 /* da+sbTools.hpp in Headers */,
-				4F625BBE2BB81B710029C995 /* da+hook.hpp in Headers */,
+				4F8FF5A62C01B345008164CD /* da+hook.hpp in Headers */,
+				4F8FF5A02C01B325008164CD /* da+sbTools.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -213,11 +205,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4FBC0AF72BB967D30064F1A6 /* da+sbTools.mm in Sources */,
+				4F8FF5A12C01B325008164CD /* da+sbTools.mm in Sources */,
 				4F0869152BC50D8600D20DA1 /* DASceneHandleObserver.mm in Sources */,
+				4F8FF5A52C01B345008164CD /* da+hook.mm in Sources */,
 				4F08693B2BC556F700D20DA1 /* DAAlertView.mm in Sources */,
 				4F625BB92BB8124F0029C995 /* main.mm in Sources */,
-				4F625BBF2BB81B710029C995 /* da+hook.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

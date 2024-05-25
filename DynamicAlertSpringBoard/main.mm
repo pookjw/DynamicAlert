@@ -51,20 +51,20 @@ OBJC_EXPORT id objc_msgSendSuper2(void);
 
 namespace da_UIScene {
 namespace _sceneForFBSScene_create_withSession_connectionOptions {
-static void *key = &key;
-static id (*original)(Class, SEL, id, BOOL, id, id);
-static id custom(Class cls, SEL _cmd, id fbScene, BOOL create, id session, id connectionOptions) {
+void *key = &key;
+id (*original)(Class, SEL, id, BOOL, id, id);
+id custom(Class cls, SEL _cmd, id fbScene, BOOL create, id session, id connectionOptions) {
     UIWindowScene *windowScene = original(cls, _cmd, fbScene, create, session, connectionOptions);
     
-    if ([windowScene isKindOfClass:objc_lookUpClass("SBWindowScene")]) {
-        UIWindow *window = ((id (*)(id, SEL, id))objc_msgSend)([objc_lookUpClass("SBFSecureTouchPassThroughWindow") alloc], @selector(initWithWindowScene:), windowScene);
-        ButtonViewController *rootViewController = [ButtonViewController new];
-        window.rootViewController = rootViewController;
-        [rootViewController release];
-        [window makeKeyAndVisible];
-        objc_setAssociatedObject(windowScene, key, window, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-        [window release];
-    }
+    // if ([windowScene isKindOfClass:objc_lookUpClass("SBWindowScene")]) {
+    //     UIWindow *window = ((id (*)(id, SEL, id))objc_msgSend)([objc_lookUpClass("SBFSecureTouchPassThroughWindow") alloc], @selector(initWithWindowScene:), windowScene);
+    //     ButtonViewController *rootViewController = [ButtonViewController new];
+    //     window.rootViewController = rootViewController;
+    //     [rootViewController release];
+    //     [window makeKeyAndVisible];
+    //     objc_setAssociatedObject(windowScene, key, window, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    //     [window release];
+    // }
     
     return windowScene;
 }
@@ -73,8 +73,8 @@ static id custom(Class cls, SEL _cmd, id fbScene, BOOL create, id session, id co
 
 namespace da_SBSystemApertureSceneElement {
 namespace _shouldHandleLaunchAction {
-static BOOL (*original)(id, SEL);
-static BOOL custom(id self, SEL _cmd) {
+BOOL (*original)(id, SEL);
+BOOL custom(id self, SEL _cmd) {
     if (da::isDAElementFromSystemApertureSceneElement(self)) {
         return NO;
     } else {
@@ -88,8 +88,8 @@ static BOOL custom(id self, SEL _cmd) {
 
 namespace da_SBSAContainerViewDescription {
 namespace contentBounds {
-static CGRect (*original)(id, SEL);
-static CGRect custom(id self, SEL _cmd) {
+CGRect (*original)(id, SEL);
+CGRect custom(id self, SEL _cmd) {
     if (!da::isDAElementFromContainerViewDescription(self)) {
         return original(self, _cmd);
     }
@@ -100,8 +100,8 @@ static CGRect custom(id self, SEL _cmd) {
 }
 
 namespace contentCenter {
-static CGPoint (*original)(id, SEL);
-static CGPoint custom(id self, SEL _cmd) {
+CGPoint (*original)(id, SEL);
+CGPoint custom(id self, SEL _cmd) {
     if (!da::isDAElementFromContainerViewDescription(self)) {
         return original(self, _cmd);
     }
@@ -114,8 +114,8 @@ static CGPoint custom(id self, SEL _cmd) {
 
 namespace da_SBSAViewDescription {
 namespace bounds {
-static CGRect (*original)(id, SEL);
-static CGRect custom(id self, SEL _cmd) {
+CGRect (*original)(id, SEL);
+CGRect custom(id self, SEL _cmd) {
     if (![self isKindOfClass:objc_lookUpClass("SBSAContainerViewDescription")]) {
         return original(self, _cmd);
     }
@@ -137,8 +137,8 @@ static CGRect custom(id self, SEL _cmd) {
 }
 
 namespace center {
-static CGPoint (*original)(id, SEL);
-static CGPoint custom(id self, SEL _cmd) {
+CGPoint (*original)(id, SEL);
+CGPoint custom(id self, SEL _cmd) {
     if (![self isKindOfClass:objc_lookUpClass("SBSAContainerViewDescription")]) {
         return original(self, _cmd);
     }
@@ -166,8 +166,8 @@ static CGPoint custom(id self, SEL _cmd) {
 
 namespace da_SAUIElementView {
 namespace initWithElementViewProvider {
-static id (*original)(UIView *, SEL, id);
-static id custom(UIView *self, SEL _cmd, id elementViewProvider) {
+id (*original)(UIView *, SEL, id);
+id custom(UIView *self, SEL _cmd, id elementViewProvider) {
     // SAUIElementViewController -> SAUIElementView
     
     self = original(self, _cmd, elementViewProvider);
@@ -212,8 +212,8 @@ static id custom(UIView *self, SEL _cmd, id elementViewProvider) {
 
 namespace da_SBSceneHandle {
 namespace _commonInit {
-static void (*original)(id, SEL);
-static void custom(id self, SEL _cmd) {
+void (*original)(id, SEL);
+void custom(id self, SEL _cmd) {
     original(self, _cmd);
     
     ((void (*)(id, SEL, id))objc_msgSend)(self, sel_registerName("addObserver:"), DASceneHandleObserver.sharedInstance);
@@ -223,8 +223,8 @@ static void custom(id self, SEL _cmd) {
 
 namespace da_SAUILayoutSpecifyingElementViewController {
 namespace viewDidLoad {
-static void (*original)(id, SEL);
-static void custom(id self, SEL _cmd) {
+void (*original)(id, SEL);
+void custom(id self, SEL _cmd) {
     original(self, _cmd);
     
     id elementViewProvider = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("elementViewProvider"));
@@ -237,8 +237,8 @@ static void custom(id self, SEL _cmd) {
 
 namespace da_SBSystemApertureViewController {
 namespace  _collapseExpandedElementIfPossible {
-static BOOL (*original)(id, SEL);
-static BOOL custom(id self, SEL _cmd) {
+BOOL (*original)(id, SEL);
+BOOL custom(id self, SEL _cmd) {
     id _currentFirstElement = ((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("_currentFirstElement"));
     
     if (da::isDAElementFromSystemApertureSceneElement(_currentFirstElement)) {
@@ -250,7 +250,7 @@ static BOOL custom(id self, SEL _cmd) {
 }
 }
 
-__attribute__((constructor)) static void init() {
+__attribute__((constructor)) void init() {
     da::hookMessage(UIScene.class, sel_registerName("_sceneForFBSScene:create:withSession:connectionOptions:"), NO, (IMP)(&da_UIScene::_sceneForFBSScene_create_withSession_connectionOptions::custom), (IMP *)(&da_UIScene::_sceneForFBSScene_create_withSession_connectionOptions::original));
     
     da::hookMessage(objc_lookUpClass("SBSystemApertureSceneElement"), sel_registerName("_shouldHandleLaunchAction"), YES, (IMP)(&da_SBSystemApertureSceneElement::_shouldHandleLaunchAction::custom), (IMP *)(&da_SBSystemApertureSceneElement::_shouldHandleLaunchAction::original));
